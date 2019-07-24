@@ -91,6 +91,11 @@ public class SLSharedCodeSeparatedEnvTest {
         engine.close();
     }
 
+    // adapted from SLDebugDirectTest.getOut()
+    private static String getOut(ByteArrayOutputStream os) throws Exception {
+        return os.toString("UTF-8").replaceAll(System.lineSeparator(), "\n");
+    }
+
     @Test
     public void shareCodeUseDifferentOutputStreams() throws Exception {
 
@@ -101,12 +106,12 @@ public class SLSharedCodeSeparatedEnvTest {
         // @formatter:on
 
         e1.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
+        assertEquals("Ahoj1\n", getOut(os1));
         assertEquals("", os2.toString("UTF-8"));
 
         e2.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
-        assertEquals("Ahoj2\n", os2.toString("UTF-8"));
+        assertEquals("Ahoj1\n", getOut(os1));
+        assertEquals("Ahoj2\n", getOut(os2));
     }
 
     @Test
@@ -121,12 +126,12 @@ public class SLSharedCodeSeparatedEnvTest {
         // @formatter:on
 
         e1.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
+        assertEquals("Ahoj1\n", getOut(os1));
         assertEquals("", os2.toString("UTF-8"));
 
         e2.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
-        assertEquals("Ahoj2\n", os2.toString("UTF-8"));
+        assertEquals("Ahoj1\n", getOut(os1));
+        assertEquals("Ahoj2\n", getOut(os2));
 
         engine.close();
 
@@ -135,7 +140,7 @@ public class SLSharedCodeSeparatedEnvTest {
                                         "Ahoj1\n" +
                                         "Ahoj2\n" +
                                         "endOfOutputCapture\n",
-                        outConsumer.toString("UTF-8"));
+                        getOut(outConsumer));
 
         assertEquals("Output of instrument goes not to os runtime if specified otherwise",
                         "initializingOutputCapture\n" + "endOfOutputCapture\n",

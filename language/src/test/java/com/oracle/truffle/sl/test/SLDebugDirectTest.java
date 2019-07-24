@@ -152,7 +152,7 @@ public class SLDebugDirectTest {
     }
 
     protected final String getOut() {
-        return new String(out.toByteArray());
+        return new String(out.toByteArray()).replaceAll(System.lineSeparator(), "\n");
     }
 
     protected final String getErr() {

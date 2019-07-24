@@ -73,6 +73,10 @@ public class SLJavaInteropTest {
         context.close();
     }
 
+    protected final String getOut() throws Exception {
+        return os.toString("UTF-8").replaceAll(System.lineSeparator(), "\n");
+    }
+
     @Test
     public void asFunction() throws Exception {
         String scriptText = "function test() {\n" + "    println(\"Called!\");\n" + "}\n";
@@ -81,7 +85,7 @@ public class SLJavaInteropTest {
         Runnable runnable = main.as(Runnable.class);
         runnable.run();
 
-        assertEquals("Called!\n", os.toString("UTF-8"));
+        assertEquals("Called!\n", getOut());
     }
 
     private Value lookup(String symbol) {
@@ -98,7 +102,7 @@ public class SLJavaInteropTest {
         PassInValues valuesIn = fn.as(PassInValues.class);
         valuesIn.call("OK", "Fine");
 
-        assertEquals("Called with OK and Fine\n", os.toString("UTF-8"));
+        assertEquals("Called with OK and Fine\n", getOut());
     }
 
     private static void assertNumber(double exp, Object real) {
@@ -123,7 +127,7 @@ public class SLJavaInteropTest {
         Value fn = lookup("values");
         PassInArray valuesIn = fn.as(PassInArray.class);
         valuesIn.call(new Object[]{"OK", "Fine"});
-        assertEquals("Called with OKFine and NULL\n", os.toString("UTF-8"));
+        assertEquals("Called with OKFine and NULL\n", getOut());
     }
 
     @Test
@@ -136,7 +140,7 @@ public class SLJavaInteropTest {
         PassInVarArg valuesIn = fn.as(PassInVarArg.class);
 
         valuesIn.call("OK", "Fine");
-        assertEquals("Called with OK and Fine\n", os.toString("UTF-8"));
+        assertEquals("Called with OK and Fine\n", getOut());
     }
 
     @Test
@@ -149,7 +153,7 @@ public class SLJavaInteropTest {
         PassInArgAndVarArg valuesIn = fn.as(PassInArgAndVarArg.class);
 
         valuesIn.call("OK", "Fine", "Well");
-        assertEquals("Called with OK and FineWell\n", os.toString("UTF-8"));
+        assertEquals("Called with OK and FineWell\n", getOut());
     }
 
     @Test
