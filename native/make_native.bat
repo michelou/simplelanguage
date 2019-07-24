@@ -37,9 +37,9 @@ if not "%SL_BUILD_NATIVE%"=="true" (
 )
 set _CPATH=%_LANGUAGE_DIR%\target\simplelanguage.jar;%_LAUNCHER_DIR%\target\launcher-%_GRAALVM_VERSION%-SNAPSHOT.jar
 
-if exist "%_TARGET_DIR%\" ( del "%_TARGET_DIR%\slnative.*"
-) else ( mkdir "%_TARGET_DIR%"
-)
+if exist "%_TARGET_DIR%\" rmdir /s /q "%_TARGET_DIR%"
+mkdir "%_TARGET_DIR%"
+
 if %_DEBUG%==1 echo [%_BASENAME%] %_NATIVE_CMD% %_NATIVE_OPTS% -cp %_CPATH% com.oracle.truffle.sl.launcher.SLMain "%_TARGET_DIR%\slnative"
 rem native-image tool generates files %_TARGET_DIR%\slnative.{exe,exp,lib,obj,pdb,tmp}
 call %_NATIVE_CMD% %_NATIVE_OPTS% -cp %_CPATH% com.oracle.truffle.sl.launcher.SLMain "%_TARGET_DIR%\slnative"

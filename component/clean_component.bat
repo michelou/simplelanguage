@@ -12,16 +12,13 @@ set _EXITCODE=0
 
 for %%f in ("%~dp0") do set _ROOT_DIR=%%~sf
 
-set _JAR_FILE=%_ROOT_DIR%sl-component.jar
+set _TARGET_DIR=%_ROOT_DIR%target
 
 rem ##########################################################################
 rem ## Main
 
-if exist "%_JAR_FILE%" (
-    if %_DEBUG%==1 echo [%_BASENAME%] del "%_JAR_FILE%"
-    del "%_JAR_FILE%"
-) else (
-    echo %_JAR_FILE% not found
+if exist "%_TARGET_DIR%\" ( rmdir /s /q "%_TARGET_DIR%"
+) else ( echo %_TARGET_DIR% not found.
 )
 
 goto end

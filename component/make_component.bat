@@ -21,10 +21,11 @@ set _GRAALVM_VERSION=19.1.1
 
 for %%f in ("%~dp0") do set _COMPONENT_DIR=%%~sf
 
-set _TEMP_DIR=%_COMPONENT_DIR%\component_temp_dir
-
+set _TARGET_DIR=%_COMPONENT_DIR%target
+set _TEMP_DIR=%_COMPONENT_DIR%temp
 set _META_INF_DIR=%_TEMP_DIR%\META-INF
 set _LANGUAGE_PATH=%_TEMP_DIR%\jre\languages\sl
+
 set _INCLUDE_SLNATIVE=
 if exist "%_NATIVE_DIR%\slnative.exe" (
     set _INCLUDE_SLNATIVE=1
@@ -62,7 +63,7 @@ if defined _INCLUDE_SLNATIVE (
     copy /y %_NATIVE_DIR%\slnative.exe "%_LANGUAGE_PATH%\bin\" 1>NUL
 )
 
-mkdir "%_META_INF_DIR%"
+mkdir "%_TARGET_DIR%" "%_META_INF_DIR%"
 (
     echo Bundle-Name: Simple Language
     echo Bundle-Symbolic-Name: com.oracle.truffle.sl
@@ -72,7 +73,7 @@ mkdir "%_META_INF_DIR%"
 ) > "%_META_INF_DIR%\MANIFEST.MF"
 
 pushd "%_TEMP_DIR%"
-call %_JAR_CMD% cfm %_COMPONENT_DIR%\sl-component.jar %_META_INF_DIR%\MANIFEST.MF .
+call %_JAR_CMD% cfm %_TARGET_DIR%\sl-component.jar %_META_INF_DIR%\MANIFEST.MF .
 popd
 
 call :rm_temp

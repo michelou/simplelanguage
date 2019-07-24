@@ -6,7 +6,7 @@
     <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
-    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> example project on a Windows machine. In particular we generate both the JVM version and the native version of the Java application.
+    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine. In particular we generate both the JVM version and the native version of the Java application.
   </td>
   </tr>
 </table>
@@ -42,7 +42,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 10.0\  <i>(555 MB)</i>
 
 ## Directory structure
 
-We added/modify the following files to the original [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project:
+We added/modified the following files from the original [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project:
 <pre style="font-size:80%;">
 component\clean_component.bat
 component\make_component.bat
@@ -114,10 +114,10 @@ We distinguish different sets of batch commands:
         test        perform test with generated ANTLR parser
     </pre>
 
-4. [**`sl.bat`**](sl.bat) - This batch command performs the same operations as the corresponding shell script [**`sl`**](sl) (called from [Travis job](https://docs.travis-ci.com/user/job-lifecycle/) **`script`** in file [**`.travis.yml`**](.travis.yml).
+4. [**`sl.bat`**](sl.bat) - This batch command performs the same operations as the corresponding shell script [**`sl`**](sl) (called from [Travis job](https://docs.travis-ci.com/user/job-lifecycle/) **`script`** in file [**`.travis.yml`**](.travis.yml)).
 
 
-    > **:mag_right:** Batch file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is a simplified version of s [**`sl.bat`**](sl.bat) and is copied to the generated binary distribution when running command [**`build dist`**](build.bat).
+    > **:mag_right:** Batch file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is a minimalized version of [**`sl.bat`**](sl.bat); command [**`build dist`**](build.bat) does add it to the generated binary distribution.
 
 5. [**`component\clean_component.bat`**](component/clean_component.bat) and [**`component\make_component.bat`**](component/make_component.bat) - These two batch commands are call from the POM file [**`component\pom.xml`**](component/pom.xml).
 
@@ -136,7 +136,8 @@ Tool versions:
    javac 1.8.0_222, mvn 3.6.1, git 2.22.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, uuidgen v1.01
 
-<b>&gt; where mvn</b>
+<b>&gt; where javac mvn</b>
+C:\opt\graalvm-ce-19.1.1\bin\javac.exe
 C:\opt\apache-maven-3.6.1\bin\mvn
 C:\opt\apache-maven-3.6.1\bin\mvn.cmd
 </pre>
@@ -158,6 +159,16 @@ Tool paths:
 </pre>
 
 #### `build.bat`
+
+Command [**`build -verbose clean`**] deletes all output directories.
+
+<pre style="font-size:80%;">
+<b>&gt; build -verbose clean</b>
+Delete directory "W:\component\target"
+Delete directory "W:\language\target"
+Delete directory "W:\launcher\target"
+Delete directory "W:\target"
+</pre>
 
 Command [**`build -native -verbose dist`**](build.bat) generates both the JVM version and the native version of our application.
 
@@ -242,9 +253,13 @@ W:\TARGET
 As expected the file sizes are very different:
 
 <pre style="font-size:80%;">
-<b>&gt; where /t /r target\sl\bin sl*</b>
-      3028   20.07.2019      11:52:50  W:\target\sl\bin\sl.bat
-  26852864   24.07.2019      08:22:37  W:\target\sl\bin\slnative.exe
+<b>&gt; where /t /r target\sl\lib *.jar</b>
+    337904   22.07.2019      18:41:46  W:\target\sl\lib\antlr4-runtime-4.7.2.jar
+      4945   24.07.2019      12:53:37  W:\target\sl\lib\launcher-19.1.1-SNAPSHOT.jar
+    339575   24.07.2019      12:53:37  W:\target\sl\lib\simplelanguage-19.1.1-SNAPSHOT.jar
+
+<b>&gt; where /t /r target\sl\bin *.exe</b>
+  26853376   24.07.2019      13:09:57  W:\target\sl\bin\slnative.exe
 </pre>
 
 We can now execute the two versions (JVM and native) of our application:
@@ -373,10 +388,10 @@ import org.graalvm.polyglot.Value;
 
 public final class SimpleLanguageMainTest {
     private static final String SL = "sl";
-&nbsp;
+    &nbsp;
     public static void main(String[] args) throws Exception {
         Map<String, String> options = new HashMap<>();
-&nbsp;
+        &nbsp;
         System.out.println("SimpleLanguage Example");
         Source source = Source.newBuilder(SL, new File(args[0])).build();
         Context context = Context.newBuilder(SL).in(System.in).out(System.out).options(options).build();

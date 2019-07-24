@@ -13,11 +13,14 @@ set _EXITCODE=0
 
 for %%f in ("%~dp0") do set _ROOT_DIR=%%~sf
 
+set _COMPONENT_DIR=%_ROOT_DIR%component
 set _LANGUAGE_DIR=%_ROOT_DIR%language
 set _LAUNCHER_DIR=%_ROOT_DIR%launcher
 set _NATIVE_DIR=%_ROOT_DIR%native
 
-set _SOURCE_DIR=%_LAUNCHER_DIR%\src\main\scripts
+set _LAUNCHER_SCRIPTS_DIR=%_LAUNCHER_DIR%\src\main\scripts
+set _LAUNCHER_TARGET_DIR=%_LAUNCHER_DIR%\target
+set _NATIVE_TARGET_DIR=%_NATIVE_DIR%\target
 
 set _TARGET_DIR=%_ROOT_DIR%target
 set _TARGET_BIN_DIR=%_TARGET_DIR%\sl\bin
@@ -110,7 +113,7 @@ set _MVN_OPTS=
 goto :eof
 
 :clean
-for %%f in ("%_LANGUAGE_DIR%\target" "%_LAUNCHER_DIR%\target" "%_NATIVE_DIR%\target" "%_TARGET_DIR%") do (
+for %%f in ("%_COMPONENT_DIR%\target" "%_LANGUAGE_DIR%\target" "%_LAUNCHER_TARGET_DIR%" "%_NATIVE_TARGET_DIR%" "%_TARGET_DIR%") do (
     set __DIR=%%~f
     if exist "!__DIR!\" (
         if %_DEBUG%==1 ( echo [%_BASENAME%] rmdir /s /q "!__DIR!"
@@ -119,7 +122,7 @@ for %%f in ("%_LANGUAGE_DIR%\target" "%_LAUNCHER_DIR%\target" "%_NATIVE_DIR%\tar
         rmdir /s /q "!__DIR!"
         if not !ERRORLEVEL!==0 (
             set _EXITCODE=1
-            rem let's try removal with next directory
+            rem try to remove next directory
             rem goto :eof
         )
     )
@@ -139,66 +142,24 @@ if not %ERRORLEVEL%==0 (
     goto :eof
 )
 call :dist_unsetenv
+
 set __LANGUAGE_JAR_FILE=
 for %%f in (%_LANGUAGE_DIR%\target\*language*SNAPSHOT.jar) do set __LANGUAGE_JAR_FILE=%%~f
-if exist "%__LANGUAGE_JAR_FILE%" (
-    if not exist "%_TARGET_LIB_DIR%\" mkdir "%_TARGET_LIB_DIR%\"
-    if %_DEBUG%==1 ( echo [%_BASENAME%] copy /y "%__LANGUAGE_JAR_FILE%" "%_TARGET_LIB_DIR%\"
-    ) else if %_VERBOSE%== ( echo Copy file %__LANGUAGE_JAR_FILE% to directory %_TARGET_LIB_DIR%
-    )
-    copy /y "%__LANGUAGE_JAR_FILE%" "%_TARGET_LIB_DIR%\" 1>NUL
-) else (
-    rem echo Error: Launcher JAR file not found in directory %_LAUNCHER_DIR%\target 1>&2
-    rem set _EXITCODE=1
-    rem goto :eof
-)
+call :dist_copy "%__LANGUAGE_JAR_FILE%" "%_TARGET_LIB_DIR%\"
+
 set __LAUNCHER_JAR_FILE=
-for %%f in (%_LAUNCHER_DIR%\target\launcher*SNAPSHOT.jar) do set __LAUNCHER_JAR_FILE=%%~f
-if exist "%__LAUNCHER_JAR_FILE%" (
-    if not exist "%_TARGET_LIB_DIR%\" mkdir "%_TARGET_LIB_DIR%\"
-    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__LAUNCHER_JAR_FILE%" "%_TARGET_LIB_DIR%\"
-    copy /y "%__LAUNCHER_JAR_FILE%" "%_TARGET_LIB_DIR%\" 1>NUL
-) else (
-    echo Error: Launcher JAR file not found in directory %_LAUNCHER_DIR%\target 1>&2
-    set _EXITCODE=1
-    rem goto :eof
-)
+for %%f in (%_LAUNCHER_TARGET_DIR%\launcher*SNAPSHOT.jar) do set __LAUNCHER_JAR_FILE=%%~f
+call :dist_copy "%__LAUNCHER_JAR_FILE%" "%_TARGET_LIB_DIR%\"
+
 set __ANTLR4_JAR_FILE=
 for /f "delims=" %%f in ('where /r "%USERPROFILE%\.m2\repository\org\antlr" *.jar') do set __ANTLR4_JAR_FILE=%%~f
-if exist "%__ANTLR4_JAR_FILE%" (
-    if not exist "%_TARGET_LIB_DIR%\" mkdir "%_TARGET_LIB_DIR%\"
-    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__ANTLR4_JAR_FILE%" "%_TARGET_LIB_DIR%\"
-    copy /y "%__ANTLR4_JAR_FILE%" "%_TARGET_LIB_DIR%\" 1>NUL
-) else (
-    echo Error: Antlr4 JAR file not found in directory %USERPROFILE%\.m2\repository 1>&2
-    set _EXITCODE=1
-    rem goto :eof
+call :dist_copy "%__ANTLR4_JAR_FILE%" "%_TARGET_LIB_DIR%\"
+
+call :dist_copy "%_LAUNCHER_SCRIPTS_DIR%\sl.bat" "%_TARGET_BIN_DIR%\"
+
+if %_NATIVE%==1 (
+    call :dist_copy "%_NATIVE_TARGET_DIR%\slnative.exe" "%_TARGET_BIN_DIR%\"
 )
-set __SL_CMD=%_SOURCE_DIR%\sl.bat
-if exist "%__SL_CMD%" (
-    if not exist "%_TARGET_BIN_DIR%\" mkdir "%_TARGET_BIN_DIR%\"
-    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__SL_CMD%" "%_TARGET_BIN_DIR%\"
-    copy /y "%__SL_CMD%" "%_TARGET_BIN_DIR%\" 1>NUL
-) else (
-    echo Error: SL batch file not found in directory %_SOURCE_DIR% 1>&2
-    set _EXITCODE=1
-    rem goto :eof
-)
-if not %_NATIVE%==1 goto dist_done
-set __SLNATIVE_CMD=%_NATIVE_DIR%\target\slnative.exe
-if exist "%__SLNATIVE_CMD%" (
-    if not exist "%_TARGET_BIN_DIR%\" mkdir "%_TARGET_BIN_DIR%\"
-    if %_DEBUG%==1 ( echo [%_BASENAME%] copy /y "%__SLNATIVE_CMD%" "%_TARGET_BIN_DIR%\"
-    ) else if %_VERBOSE%==1 ( echo Copy executable %__SLNATIVE_CMD% to directory %_TARGET_BIN_DIR%
-    )
-    copy /y "%__SLNATIVE_CMD%" "%_TARGET_BIN_DIR%\" 1>NUL
-) else (
-    echo Error: SL executable not found in directory %_NATIVE_DIR%\target 1>&2
-    set _EXITCODE=1
-    rem goto :eof
-)
-:dist_done
-rem tree /f "%_TARGET_DIR%"
 goto :eof
 
 :dist_setenv
@@ -246,6 +207,25 @@ if defined __LIB set LIB=%__LIB%
 if defined __LIBPATH set LIBPATH=%__LIBPATH%
 if defined __PATH set PATH=%__PATH%
 if defined __SL_BUILD_NATIVE set SL_BUILD_NATIVE=%__SL_BUILD_NATIVE%
+goto :eof
+
+:dist_copy
+set __SOURCE_FILE=%~1
+set __DEST_DIR=%~2
+
+if exist "%__SOURCE_FILE%" (
+    if not exist "%__DEST_DIR%\" mkdir "%__DEST_DIR%\"
+    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__SOURCE_FILE%" "%__DEST_DIR%\"
+    copy /y "%__SOURCE_FILE%" "%__DEST_DIR%\" 1>NUL
+    if not !ERRORLEVEL!==0 (
+        set _EXITCODE=1
+        goto :eof
+    )
+) else (
+    echo Error: Source file not found ^(%__SOURCE_FILE%^) 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
 goto :eof
 
 :parser
