@@ -200,7 +200,7 @@ if %_VERBOSE%==1 echo Generate test class %_MAIN_CLASS_NAME%.java into directory
     echo             System.err.println("No function main(^) defined in SL source file."^);
     echo             System.exit(1^);
     echo         }
-    echo         if (!result.isNull(^)^) {
+    echo         if (^^!result.isNull(^)^) {
     echo             System.out.println(result.toString(^)^);
     echo         }
     echo         context.close(^);

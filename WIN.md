@@ -6,7 +6,7 @@
     <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
-    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> example project example on a Windows machine. In particular we generate both the JVM version and the native version of the Java application.
+    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> example project on a Windows machine. In particular we generate both the JVM version and the native version of the Java application.
   </td>
   </tr>
 </table>
@@ -18,7 +18,7 @@ This project depends on several external software for the **Microsoft Windows** 
 - [Apache Maven 3.6](http://maven.apache.org/download.cgi) ([requires Java 7](http://maven.apache.org/docs/history.html))  ([*release notes*](http://maven.apache.org/docs/3.6.1/release-notes.html))
 - [GraalVM Community Edition 19.1](https://github.com/oracle/graal/releases)  ([*release notes*](https://www.graalvm.org/docs/release-notes/#1911))
 - [Microsoft Windows SDK for Windows 7 and .NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=8442) <sup id="anchor_01">[[1]](#footnote_01)</sup>
-- [Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422) <sup id="anchor_02">[[1]](#footnote_01)</sup>
+- [Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422) <sup id="anchor_01">[[1]](#footnote_01)</sup>
 
 Optionally you may also install the following software:
 
@@ -309,7 +309,6 @@ SimpleLanguage Example
 4000000000003
 3000000000004
 7000000000000
-NULL
 </pre>
 
 Source file **`SimpleLanguageMainTest.java`** <sup id="anchor_02">[[2]](#footnote_02)</sup> is a simplified version of [**`SLMain.java`**](https://github.com/graalvm/simplelanguage/blob/master/launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) available from the [**`graalvm/simplelanguage`**](https://github.com/graalvm/simplelanguage) project.
@@ -363,21 +362,21 @@ VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
 The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks as follows:
 <pre style="font-size:80%;">
 package com.oracle.truffle.sl.parser;
-
+&nbsp;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
+&nbsp;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
 public final class SimpleLanguageMainTest {
     private static final String SL = "sl";
-
+&nbsp;
     public static void main(String[] args) throws Exception {
         Map<String, String> options = new HashMap<>();
-
+&nbsp;
         System.out.println("SimpleLanguage Example");
         Source source = Source.newBuilder(SL, new File(args[0])).build();
         Context context = Context.newBuilder(SL).in(System.in).out(System.out).options(options).build();
@@ -388,7 +387,7 @@ public final class SimpleLanguageMainTest {
             System.err.println("No function main(^) defined in SL source file.");
             System.exit(1);
         }
-        if (result.isNull()) {
+        if (!result.isNull()) {
             System.out.println(result.toString());
         }
         context.close();
