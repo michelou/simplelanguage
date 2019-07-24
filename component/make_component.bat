@@ -47,23 +47,30 @@ if not exist "%_JAR_CMD%" (
 rem ##########################################################################
 rem ## Main
 
-call :rm_temp
+call :rmdir "%_TEMP_DIR%"
 if not %_EXITCODE%==0 goto end
 
-mkdir "%_LANGUAGE_PATH%"
-copy /y %_LANGUAGE_DIR%\target\simplelanguage.jar "%_LANGUAGE_PATH%\" 1>NUL
+call :mkdir "%_LANGUAGE_PATH%"
+if not %_EXITCODE%==0 goto end
+copy /y "%_LANGUAGE_DIR%\target\simplelanguage.jar" "%_LANGUAGE_PATH%\" 1>NUL
 
-mkdir "%_LANGUAGE_PATH%\launcher"
-copy /y %_LAUNCHER_DIR%\target\sl-launcher.jar "%_LANGUAGE_PATH%\launcher\" 1>NUL
+call :mkdir "%_LANGUAGE_PATH%\launcher"
+if not %_EXITCODE%==0 goto end
+copy /y "%_LAUNCHER_DIR%\target\sl-launcher.jar" "%_LANGUAGE_PATH%\launcher\" 1>NUL
 
-mkdir "%_LANGUAGE_PATH%\bin"
-copy /y %_ROOT_DIR%sl.bat "%_LANGUAGE_PATH%\bin\" 1>NUL
+call :mkdir "%_LANGUAGE_PATH%\bin"
+if not %_EXITCODE%==0 goto end
+copy /y "%_ROOT_DIR%sl.bat" "%_LANGUAGE_PATH%\bin\" 1>NUL
 
 if defined _INCLUDE_SLNATIVE (
-    copy /y %_NATIVE_DIR%\slnative.exe "%_LANGUAGE_PATH%\bin\" 1>NUL
+    copy /y "%_NATIVE_DIR%\slnative.exe" "%_LANGUAGE_PATH%\bin\" 1>NUL
 )
 
-mkdir "%_TARGET_DIR%" "%_META_INF_DIR%"
+call :mkdir "%_TARGET_DIR%"
+if not %_EXITCODE%==0 goto end
+
+call :mkdir "%_META_INF_DIR%"
+if not %_EXITCODE%==0 goto end
 (
     echo Bundle-Name: Simple Language
     echo Bundle-Symbolic-Name: com.oracle.truffle.sl
@@ -76,16 +83,30 @@ pushd "%_TEMP_DIR%"
 call %_JAR_CMD% cfm %_TARGET_DIR%\sl-component.jar %_META_INF_DIR%\MANIFEST.MF .
 popd
 
-call :rm_temp
+call :rmdir "%_TEMP_DIR%"
+if not %_EXITCODE%==0 goto end
 
 goto :end
 
 rem ##########################################################################
 rem ## Subroutines
 
-:rm_temp
-if not exist "%_TEMP_DIR%" goto :eof
-rmdir /s /q "%_TEMP_DIR%"
+rem input parameter: 1=directory path
+:mkdir
+set __DIR=%~1
+if exist "%__DIR%" rmdir /s /q "%__DIR%"
+mkdir "%__DIR%"
+if not %ERRORLEVEL%==0 (
+    set _EXITCODE=1
+    goto :eof
+)
+goto :eof
+
+rem input parameter: 1=directory path
+:rmdir
+set __DIR=%~1
+if not exist "%__DIR%" goto :eof
+rmdir /s /q "%__DIR%"
 if not %ERRORLEVEL%==0 (
     set _EXITCODE=1
     goto :eof

@@ -28,6 +28,7 @@ set _TARGET_LIB_DIR=%_TARGET_DIR%\sl\lib
 
 call :args %*
 if not %_EXITCODE%==0 goto end
+if %_HELP%==1 call :help & exit /b %_EXITCODE%
 
 rem ##########################################################################
 rem ## Main
@@ -53,28 +54,30 @@ rem ##########################################################################
 rem ## Subroutines
 
 rem input parameter: %*
-rem output parameter(s): _CLEAN, _DIST, _PARSER, _DEBUG, _NATIVE, _VERBOSE
+rem output parameter(s): _CLEAN, _DIST, _PARSER, _DEBUG,  _NATIVE, _VERBOSE
 :args
 set _CLEAN=0
 set _DIST=0
 set _PARSER=0
 set _DEBUG=0
+set _HELP=0
 set _NATIVE=0
 set _VERBOSE=0
 set __N=0
 :args_loop
 set __ARG=%~1
 if not defined __ARG (
-    if !__N!==0 call :help
+    if !__N!==0 set _HELP=1
     goto args_done
 ) else if not "%__ARG:~0,1%"=="-" (
     set /a __N=!__N!+1
 )
-if /i "%__ARG%"=="help" ( call :help & goto :eof
+if /i "%__ARG%"=="help" ( set _HELP=1
 ) else if /i "%__ARG%"=="clean" ( set _CLEAN=1
 ) else if /i "%__ARG%"=="dist" ( set _DIST=1
 ) else if /i "%__ARG%"=="parser" ( set _PARSER=1
 ) else if /i "%__ARG%"=="-debug" ( set _DEBUG=1
+) else if /i "%__ARG%"=="-help" ( set _HELP=1
 ) else if /i "%__ARG%"=="-native" ( set _NATIVE=1
 ) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
 ) else (
@@ -134,10 +137,12 @@ if %_DEBUG%==1 ( set __MVN_OPTS=%_MVN_OPTS%
 ) else if %_VERBOSE%==1 ( set __MVN_OPTS=%_MVN_OPTS%
 ) else ( set __MVN_OPTS=--quiet %_MVN_OPTS%
 )
+
 call :dist_setenv
 if %_DEBUG%==1 echo [%_BASENAME%] call %_MVN_CMD% %__MVN_OPTS% package
 call %_MVN_CMD% %__MVN_OPTS% package
 if not %ERRORLEVEL%==0 (
+    echo Error: Execution of maven package failed 1>&2
     set _EXITCODE=1
     goto :eof
 )
