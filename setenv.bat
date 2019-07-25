@@ -17,7 +17,7 @@ chcp 65001 1>NUL
 
 call :args %*
 if not %_EXITCODE%==0 goto end
-if defined _HELP call :help & exit /b %_EXITCODE%
+if %_HELP%==1 call :help & exit /b %_EXITCODE%
 
 rem ##########################################################################
 rem ## Main
@@ -36,12 +36,11 @@ call :git
 if not %_EXITCODE%==0 goto end
 
 call :msvs
+rem call :msvs_2019
 if not %_EXITCODE%==0 goto end
 
 call :sdk
 if not %_EXITCODE%==0 goto end
-
-if "%~1"=="clean" call :clean
 
 goto end
 
@@ -50,16 +49,21 @@ rem ## Subroutines
 
 rem input parameter: %*
 :args
+set _HELP=0
+set _USE_SDK=1
 set _VERBOSE=0
 set __N=0
 :args_loop
 set __ARG=%~1
 if not defined __ARG (
+    rem if !__N!==0 set _HELP=1
     goto args_done
 ) else if not "%__ARG:~0,1%"=="-" (
     set /a __N=!__N!+1
 )
-if /i "%__ARG%"=="help" ( call :help & goto :eof
+if /i "%__ARG%"=="help" ( set _HELP=1
+) else if /i "%__ARG%"=="-help" ( set _HELP=1
+) else if /i "%__ARG%"=="-nosdk" ( set _USE_SDK=0
 ) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
 ) else (
     echo Error: Unknown subcommand %__ARG% 1>&2
@@ -69,11 +73,13 @@ if /i "%__ARG%"=="help" ( call :help & goto :eof
 shift
 goto :args_loop
 :args_done
+if %_DEBUG%==1 echo [%_BASENAME%] _HELP=%_HELP% _USE_SDK=%_USE_SDK% _VERBOSE=%_VERBOSE%
 goto :eof
 
 :help
 echo Usage: %_BASENAME% { options ^| subcommands }
 echo   Options:
+echo     -nosdk           don't setup Windows SDK environment ^(SetEnv.cmd^)
 echo     -verbose         display environment settings
 echo   Subcommands:
 echo     help             display this help message
@@ -167,27 +173,48 @@ goto :eof
 
 rem native-image dependency
 :msvs
-set _MSVS_HOME=C:\Progra~2\MICROS~1.0
+set "_MSVS_HOME=C:\Program Files (x86)\Microsoft Visual Studio 10.0"
 if not exist "%_MSVS_HOME%" (
     echo Error: Could not find installation directory for Microsoft Visual Studio 10 1>&2
     echo        ^(see https://github.com/oracle/graal/blob/master/compiler/README.md^) 1>&2
     set _EXITCODE=1
     goto :eof
 )
-set __MSVS_ARCH=
-if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __MSVS_ARCH=\amd64
-set "_MSVS_PATH=;%_MSVS_HOME%\VC\bin%__MSVS_ARCH%"
+rem From now on use short name of MSVS installation path
+for %%f in ("%_MSVS_HOME%") do set _MSVS_HOME=%%~sf
+set _MSVC_HOME=%_MSVS_HOME%\VC
+set __MSVC_ARCH=
+if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __MSVC_ARCH=\amd64
+set "_MSVS_PATH=;%_MSVC_HOME%\bin%__MSVC_ARCH%"
+goto :eof
+
+rem native-image dependency
+:msvs_2019
+set "_MSVS_HOME=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community"
+if not exist "%_MSVS_HOME%" (
+    echo Error: Could not find installation directory for Microsoft Visual Studio 2019 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+rem From now on use short name of MSVS installation path
+for %%f in ("%_MSVS_HOME%") do set _MSVS_HOME=%%~sf
+set _MSVC_HOME=%_MSVS_HOME%\VC\Tools\MSVC\14.21.27702
+set __MSVC_ARCH=\Hostx86\x86
+if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __MSVC_ARCH=\Hostx64\x64
+set "_MSVS_PATH=;%_MSVC_HOME%\bin%__MSVC_ARCH%"
 goto :eof
 
 rem native-image dependency
 :sdk
-set _SDK_HOME=C:\Progra~1\MICROS~4\Windows\v7.1
+set "_SDK_HOME=C:\Program Files\Microsoft SDKs\Windows\v7.1"
 if not exist "%_SDK_HOME%" (
     echo Error: Could not find installation directory for Microsoft Windows SDK 7.1 1>&2
     echo        ^(see https://github.com/oracle/graal/blob/master/compiler/README.md^) 1>&2
     set _EXITCODE=1
     goto :eof
 )
+rem From now on use short name of WinSDK installation path
+for %%f in ("%_SDK_HOME%") do set _SDK_HOME=%%~sf
 set __SDK_ARCH=
 if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __SDK_ARCH=\x64
 set "_SDK_PATH=;%_SDK_HOME%\bin%__SDK_ARCH%"
@@ -205,29 +232,30 @@ goto :eof
 
 :print_env
 set __VERBOSE=%1
-set __VERSIONS_LINE=
+set __VERSIONS_LINE1=
 set __VERSIONS_LINE2=
 set __WHERE_ARGS=
 where /q javac.exe
 if %ERRORLEVEL%==0 (
-    for /f "tokens=1,2,*" %%i in ('javac.exe -version 2^>^&1') do set "__VERSIONS_LINE=%__VERSIONS_LINE% javac %%j,"
+    for /f "tokens=1,2,*" %%i in ('javac.exe -version 2^>^&1') do set "__VERSIONS_LINE1=%__VERSIONS_LINE1% javac %%j,"
     set __WHERE_ARGS=%__WHERE_ARGS% javac.exe
 )
 where /q mvn.cmd
 if %ERRORLEVEL%==0 (
-    for /f "tokens=1,2,3,*" %%i in ('mvn.cmd -version ^| findstr Apache') do set __VERSIONS_LINE=%__VERSIONS_LINE% mvn %%k,
+    for /f "tokens=1,2,3,*" %%i in ('mvn.cmd -version ^| findstr Apache') do set __VERSIONS_LINE1=%__VERSIONS_LINE1% mvn %%k,
     set __WHERE_ARGS=%__WHERE_ARGS% mvn.cmd
 )
 where /q git.exe
 if %ERRORLEVEL%==0 (
-   for /f "tokens=1,2,*" %%i in ('git.exe --version') do set __VERSIONS_LINE=%__VERSIONS_LINE% git %%k,
+   for /f "tokens=1,2,*" %%i in ('git.exe --version') do set __VERSIONS_LINE1=%__VERSIONS_LINE1% git %%k,
     set __WHERE_ARGS=%__WHERE_ARGS% git.exe
 )
 where /q diff.exe
 if %ERRORLEVEL%==0 (
-   for /f "tokens=1-3,*" %%i in ('diff.exe --version ^| findstr /B diff') do set __VERSIONS_LINE=%__VERSIONS_LINE% diff %%l
+   for /f "tokens=1-3,*" %%i in ('diff.exe --version ^| findstr /B diff') do set __VERSIONS_LINE1=%__VERSIONS_LINE1% diff %%l
     set __WHERE_ARGS=%__WHERE_ARGS% diff.exe
 )
+rem Microsoft Visual Studio 10
 where /q cl.exe
 if %ERRORLEVEL%==0 (
    for /f "tokens=1-6,*" %%i in ('cl.exe 2^>^&1 ^| findstr Version') do set __VERSIONS_LINE2=%__VERSIONS_LINE2% cl %%o,
@@ -240,7 +268,7 @@ if %ERRORLEVEL%==0 (
     set __WHERE_ARGS=%__WHERE_ARGS% uuidgen.exe
 )
 echo Tool versions:
-echo   %__VERSIONS_LINE%
+echo   %__VERSIONS_LINE1%
 echo   %__VERSIONS_LINE2%
 if %__VERBOSE%==1 (
     rem if %_DEBUG%==1 echo [%_BASENAME%] where %__WHERE_ARGS%
@@ -258,12 +286,18 @@ endlocal & (
     rem http://www.graalvm.org/docs/graalvm-as-a-platform/implement-language/
     if not defined JAVA_HOME set JAVA_HOME=%_GRAAL_HOME%
     if not defined MAVEN_HOME set MAVEN_HOME=%_MVN_HOME%
-    if not defined MSVS_HOME set MSVS_HOME=%_MSVS_HOME%
-    if not defined SDK_HOME set SDK_HOME=%_SDK_HOME%
+    if not %_USE_SDK%==1 (
+        if not defined MSVS_HOME set MSVS_HOME=%_MSVS_HOME%
+        if not defined MSVC_HOME set MSVC_HOME=%_MSVC_HOME%
+        if not defined SDK_HOME set SDK_HOME=%_SDK_HOME%
+    )
     set "PATH=%_GRAAL_PATH%%PATH%%_MVN_PATH%%_GIT_PATH%%_MSVS_PATH%%_SDK_PATH%"
     call :print_env %_VERBOSE%
     if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
     for /f "delims==" %%i in ('set ^| findstr /b "_"') do set %%i=
-    rem native/make_native.bat is desabled by default
-    set SL_BUILD_NATIVE=false
+    rem must be called last
+    if %_USE_SDK%==1 (
+        timeout /t 2 1>NUL
+        cmd.exe /E:ON /V:ON /T:0E /K %_SDK_HOME%\bin\setEnv.cmd
+    )
 )

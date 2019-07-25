@@ -142,6 +142,7 @@ call :dist_setenv
 if %_DEBUG%==1 echo [%_BASENAME%] call %_MVN_CMD% %__MVN_OPTS% package
 call %_MVN_CMD% %__MVN_OPTS% package
 if not %ERRORLEVEL%==0 (
+    call :dist_unsetenv
     echo Error: Execution of maven package failed 1>&2
     set _EXITCODE=1
     goto :eof
@@ -168,6 +169,8 @@ if %_NATIVE%==1 (
 goto :eof
 
 :dist_setenv
+if defined sdkdir goto :eof
+
 set __INCLUDE=
 if defined INCLUDE set __INCLUDE=%INCLUDE%
 set __LIB=
@@ -179,23 +182,23 @@ if defined PATH set __PATH=%PATH%
 set __SL_BUILD_NATIVE=
 if defined SL_BUILD_NATIVE set __SL_BUILD_NATIVE=%SL_BUILD_NATIVE%
 
-set __MSVS_ARCH=
+set __MSVC_ARCH=
 set __NET_ARCH=Framework\v4.0.30319
 set __SDK_ARCH=
 if "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
-    set __MSVS_ARCH=\amd64
+    set __MSVC_ARCH=\amd64
     set __NET_ARCH=Framework64\v4.0.30319
     set __SDK_ARCH=\x64
 )
 rem Variables MSVS_HOME, SDK_HOME are defined by setenv.bat
-set INCLUDE=%MSVS_HOME%\VC\INCLUDE;%SDK_HOME%\INCLUDE;%SDK_HOME%\INCLUDE\gl
-set LIB=%MSVS_HOME%\VC\Lib%__MSVS_ARCH%;%SDK_HOME%\lib%__SDK_ARCH%
-set LIBPATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVS_HOME%\VC\lib%_MSVS_ARCH%
-set PATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVS_HOME%\Common7\IDE;%MSVS_HOME%\Common7\Tools;%MSVS_HOME%\VC\Bin%__MSVS_ARCH%;%SDK_HOME%\Bin%__SDK_ARCH%;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;%MAVEN_HOME%\bin
+set INCLUDE=%MSVC_HOME%\INCLUDE;%SDK_HOME%\INCLUDE;%SDK_HOME%\INCLUDE\gl
+set LIB=%MSVC_HOME%\Lib%__MSVC_ARCH%;%SDK_HOME%\lib%__SDK_ARCH%
+set LIBPATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVC_HOME%\lib%__MSVC_ARCH%
+set PATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVS_HOME%\Common7\IDE;%MSVS_HOME%\Common7\Tools;%MSVC_HOME%\Bin%__MSVC_ARCH%;%SDK_HOME%\Bin%__SDK_ARCH%;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;%MAVEN_HOME%\bin
 if %_NATIVE%==1 set SL_BUILD_NATIVE=true
 ) else ( set SL_BUILD_NATIVE=false
 )
-if %_DEBUG%==1 (
+if %_DEBUG%==0 (
     echo [%_BASENAME%] -------------------------------------------------------
     echo [%_BASENAME%]  E N V I R O N M E N T   V A R I A B L E S
     echo [%_BASENAME%] -------------------------------------------------------
@@ -207,6 +210,8 @@ if %_DEBUG%==1 (
 goto :eof
 
 :dist_unsetenv
+if defined sdkdir goto :eof
+
 if defined __INCLUDE set INCLUDE=%__INCLUDE%
 if defined __LIB set LIB=%__LIB%
 if defined __LIBPATH set LIBPATH=%__LIBPATH%

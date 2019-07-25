@@ -52,7 +52,7 @@ rem ## Main
 call :init
 if not %_EXITCODE%==0 goto end
 
-if %_DEBUG%==1 ( echo [%_BASENAME%] %_JAVA_CMD% -cp %_ANTLR_JAR_FILE% org.antlr.v4.Tool ... -o %_PARSER_SOURCE_DIR%
+if %_DEBUG%==1 ( echo [%_BASENAME%] %_JAVA_CMD% -cp %_ANTLR_JAR_FILE% org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener %_G4_FILE% -o %_PARSER_SOURCE_DIR%
 ) else if %_VERBOSE%==1 ( echo Generate ANTLR parser files into directory %_PARSER_SOURCE_DIR%
 )
 call "%_JAVA_CMD%" -cp %_ANTLR_JAR_FILE% org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener %_G4_FILE% -o %_PARSER_SOURCE_DIR%
@@ -100,7 +100,7 @@ if /i "%__ARG%"=="help" ( set _HELP=1
 shift
 goto :args_loop
 :args_done
-if %_DEBUG%==1 echo [%_BASENAME%] _DEBUG=%_DEBUG% _VERBOSE=%_VERBOSE%
+if %_DEBUG%==1 echo [%_BASENAME%] _DEBUG=%_DEBUG% _TEST=%_TEST% _VERBOSE=%_VERBOSE%
 goto :eof
 
 :help
@@ -120,7 +120,7 @@ if not exist "%_ANTLR_JAR_FILE%" (
          mkdir "%_PARSER_LIBS_DIR%"
     )
     if %_DEBUG%==1 ( echo [%_BASENAME%] %_CURL_CMD% %_CURL_OPTS% --output %_ANTLR_JAR_FILE% %_ANTLR_JAR_URL%
-    ) else if %_VERBOSE%==1 ( echo Download file %_ANTLR_JAR_NAME% from ANTLR website
+    ) else if %_VERBOSE%==1 ( echo Download file %_ANTLR_JAR_NAME% to directory %_PARSER_LIBS_DIR%
     )
     call %_CURL_CMD% %_CURL_OPTS% --output %_ANTLR_JAR_FILE% %_ANTLR_JAR_URL%
     if not !ERRORLEVEL!==0 (
@@ -233,7 +233,7 @@ if not %ERRORLEVEL%==0 (
 rem see https://github.com/oracle/graal/issues/1474
 set __JAVA_OPTS=%_JAVA_OPTS% -Dtruffle.class.path.append=%_ANTLR_JAR_FILE%;%_PARSER_CLASSES_DIR%
 if %_DEBUG%==1 ( echo [%_BASENAME%] %_JAVA_CMD% %__JAVA_OPTS% -cp %__CPATH% com.oracle.truffle.sl.parser.%_MAIN_CLASS_NAME% "%_LANGUAGE_DIR%\tests\Add.sl"
-) else if %_VERBOSE%==1 ( echo Execute test with SimpleLangage example tests\Add.sl
+) else if %_VERBOSE%==1 ( echo Execute SimpleLangage test with example tests\Add.sl
 )
 call %_JAVA_CMD% %__JAVA_OPTS% -cp %__CPATH% com.oracle.truffle.sl.parser.%_MAIN_CLASS_NAME% "%_LANGUAGE_DIR%\tests\Add.sl"
 if not %ERRORLEVEL%==0 (
