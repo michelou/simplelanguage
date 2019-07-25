@@ -38,17 +38,17 @@ if defined _GRAALVM_VERSION (
     set _LANGUAGE_PATH=%_SCRIPT_HOME%language\target\simplelanguage-%_VERSION%-SNAPSHOT.jar
     set _LAUNCHER_PATH=%_SCRIPT_HOME%launcher\target\launcher-%_VERSION%-SNAPSHOT.jar
     rem # Check the GraalVM version in JAVA_HOME
-    if defined _JAVA_HOME (
-        call :graalvm_version "%_JAVA_HOME%\release"
+    if defined JAVA_HOME (
+        call :graalvm_version "%JAVA_HOME%\release"
         if defined _GRAALVM_VERSION (
             if not "!_GRAALVM_VERSION!"=="%_VERSION%" (
-                echo Wrong version of GraalVM in %_JAVA_HOME%. Expected: %_VERSION%, found !_GRAALVM_VERSION!
+                echo Wrong version of GraalVM in %JAVA_HOME%. Expected: %_VERSION%, found !_GRAALVM_VERSION!
                 set _EXITCODE=1
                 goto end
             )
         )
         if defined JAVACMD ( set _JAVACMD=%JAVACMD%
-        ) else ( set _JAVACMD=%_JAVA_HOME%\bin\java.exe
+        ) else ( set _JAVACMD=%JAVA_HOME%\bin\java.exe
         )
         if not exist "!_LANGUAGE_PATH!" (
             echo Could not find language on !_LANGUAGE_PATH!. Did you run mvn package? 1>&2

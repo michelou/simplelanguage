@@ -169,7 +169,7 @@ if %_NATIVE%==1 (
 goto :eof
 
 :dist_setenv
-if defined sdkdir goto :eof
+if defined sdkdir goto dist_setenv_done
 
 set __INCLUDE=
 if defined INCLUDE set __INCLUDE=%INCLUDE%
@@ -190,15 +190,16 @@ if "%PROCESSOR_ARCHITECTURE%"=="AMD64" (
     set __NET_ARCH=Framework64\v4.0.30319
     set __SDK_ARCH=\x64
 )
-rem Variables MSVS_HOME, SDK_HOME are defined by setenv.bat
+rem Variables MSVC_HOME, MSVS_HOME and SDK_HOME are defined by setenv.bat
 set INCLUDE=%MSVC_HOME%\INCLUDE;%SDK_HOME%\INCLUDE;%SDK_HOME%\INCLUDE\gl
 set LIB=%MSVC_HOME%\Lib%__MSVC_ARCH%;%SDK_HOME%\lib%__SDK_ARCH%
 set LIBPATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVC_HOME%\lib%__MSVC_ARCH%
 set PATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVS_HOME%\Common7\IDE;%MSVS_HOME%\Common7\Tools;%MSVC_HOME%\Bin%__MSVC_ARCH%;%SDK_HOME%\Bin%__SDK_ARCH%;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;%MAVEN_HOME%\bin
-if %_NATIVE%==1 set SL_BUILD_NATIVE=true
+:dist_setenv_done
+if %_NATIVE%==1 ( set SL_BUILD_NATIVE=true
 ) else ( set SL_BUILD_NATIVE=false
 )
-if %_DEBUG%==0 (
+if %_DEBUG%==1 (
     echo [%_BASENAME%] -------------------------------------------------------
     echo [%_BASENAME%]  E N V I R O N M E N T   V A R I A B L E S
     echo [%_BASENAME%] -------------------------------------------------------
@@ -210,23 +211,25 @@ if %_DEBUG%==0 (
 goto :eof
 
 :dist_unsetenv
-if defined sdkdir goto :eof
+if defined sdkdir goto dist_unsetenv_done
 
 if defined __INCLUDE set INCLUDE=%__INCLUDE%
 if defined __LIB set LIB=%__LIB%
 if defined __LIBPATH set LIBPATH=%__LIBPATH%
 if defined __PATH set PATH=%__PATH%
+:dist_unsetenv_done
 if defined __SL_BUILD_NATIVE set SL_BUILD_NATIVE=%__SL_BUILD_NATIVE%
 goto :eof
 
 :dist_copy
 set __SOURCE_FILE=%~1
 set __DEST_DIR=%~2
+if not "%__DEST_DIR:~-1%"=="\" set __DEST_DIR=%__DEST_DIR%\
 
 if exist "%__SOURCE_FILE%" (
-    if not exist "%__DEST_DIR%\" mkdir "%__DEST_DIR%\"
-    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__SOURCE_FILE%" "%__DEST_DIR%\"
-    copy /y "%__SOURCE_FILE%" "%__DEST_DIR%\" 1>NUL
+    if not exist "%__DEST_DIR%\" mkdir "%__DEST_DIR%"
+    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__SOURCE_FILE%" "%__DEST_DIR%"
+    copy /y "%__SOURCE_FILE%" "%__DEST_DIR%" 1>NUL
     if not !ERRORLEVEL!==0 (
         set _EXITCODE=1
         goto :eof

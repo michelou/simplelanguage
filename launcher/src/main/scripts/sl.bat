@@ -9,13 +9,18 @@ set _EXITCODE=0
 for %%f in ("%~dp0..") do set _ROOT_DIR=%%~sf
 
 for %%f in ("%~dp0..\..\..") do set _JAVA_HOME=%%~sf
-set _JAVA_CMD=%_JAVA_HOME%\bin\java.exe
+if exist "%_JAVA_HOME%\bin\java.exe" (
+    set _JAVA_CMD=%_JAVA_HOME%\bin\java.exe
+) else if defined JAVA_HOME (
+    set _JAVA_CMD=%JAVA_HOME%\bin\java.exe
+) else (
+    set _JAVA_CMD=java.exe
+)
 if not exist "%_JAVA_CMD%" (
-    echo Error: Java command not found ^(%_JAVA_HOME%^) 1>&2
+    echo Error: Java command not found ^(%_JAVA_CMD%^) 1>&2
     set _EXITCODE=1
     goto end
 )
-
 set _MAIN_CLASS=com.oracle.truffle.sl.launcher.SLMain
 
 set _PROGRAM_ARGS=
