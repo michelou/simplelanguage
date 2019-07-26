@@ -19,7 +19,7 @@ for %%f in ("%~dp0") do set _SCRIPT_HOME=%%~sf
 
 call :init
 if not %_EXITCODE%==0 goto end
-    
+
 rem ##########################################################################
 rem # Locations of the language and launcher jars as well as the java command are
 rem # different if I'm running from the repository or as a component in GraalVM

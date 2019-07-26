@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 setlocal enabledelayedexpansion
 
 rem only for interactive debugging !
@@ -203,9 +203,9 @@ if %_DEBUG%==1 (
     echo [%_BASENAME%] -------------------------------------------------------
     echo [%_BASENAME%]  E N V I R O N M E N T   V A R I A B L E S
     echo [%_BASENAME%] -------------------------------------------------------
-    echo [%_BASENAME%] INCLUDE=%INCLUDE%
-    echo [%_BASENAME%] LIB=%LIB%
-    echo [%_BASENAME%] LIBPATH=%LIBPATH%
+    echo [%_BASENAME%] INCLUDE="%INCLUDE%"
+    echo [%_BASENAME%] LIB="%LIB%"
+    echo [%_BASENAME%] LIBPATH="%LIBPATH%"
     echo [%_BASENAME%] SL_BUILD_NATIVE=%SL_BUILD_NATIVE%
 )
 goto :eof

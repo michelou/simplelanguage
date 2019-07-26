@@ -66,7 +66,7 @@ if /i "%__ARG%"=="help" ( set _HELP=1
 ) else if /i "%__ARG%"=="-nosdk" ( set _USE_SDK=0
 ) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
 ) else (
-    echo Error: Unknown subcommand %__ARG% 1>&2
+    echo Error: Unknown option or subcommand %__ARG% 1>&2
     set _EXITCODE=1
     goto args_done
 )
@@ -296,7 +296,7 @@ endlocal & (
     if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
     for /f "delims==" %%i in ('set ^| findstr /b "_"') do set %%i=
     rem must be called last
-    if %_USE_SDK%==1 (
+    if %_USE_SDK%==1 if not defined WindowsSDKDir (
         timeout /t 2 1>NUL
         cmd.exe /E:ON /V:ON /T:0E /K %_SDK_HOME%\bin\setEnv.cmd
     )

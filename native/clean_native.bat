@@ -18,7 +18,7 @@ rem ##########################################################################
 rem ## Main
 
 if exist "%_TARGET_DIR%\" ( rmdir /s /q "%_TARGET_DIR%"
-) else ( echo %_TARGET_DIR% not found.
+) else ( echo Directory %_TARGET_DIR% not found.
 )
 
 goto end
