@@ -16,9 +16,9 @@
 This project depends on several external software for the **Microsoft Windows** platform:
 
 - [Apache Maven 3.6](http://maven.apache.org/download.cgi) ([requires Java 7](http://maven.apache.org/docs/history.html))  ([*release notes*](http://maven.apache.org/docs/3.6.1/release-notes.html))
-- [GraalVM Community Edition 19.1](https://github.com/oracle/graal/releases)  ([*release notes*](https://www.graalvm.org/docs/release-notes/#1911))
-- [Microsoft Windows SDK for Windows 7 and .NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=8442) <sup id="anchor_01">[[1]](#footnote_01)</sup>
-- [Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422) <sup id="anchor_01">[[1]](#footnote_01)</sup>
+- [GraalVM Community Edition 19.1](https://github.com/oracle/graal/releases) <sup id="anchor_01">[[1]](#footnote_01)</sup> ([*release notes*](https://www.graalvm.org/docs/release-notes/#1911))
+- [Microsoft Windows SDK for Windows 7 and .NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=8442) <sup id="anchor_02a">[[2]](#footnote_02)</sup>
+- [Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422) <sup id="anchor_02b">[[2]](#footnote_02)</sup>
 
 Optionally one may also install the following software:
 
@@ -71,7 +71,7 @@ In the next section we give a brief description of the added batch files.
 
 We distinguish different sets of batch commands:
 
-1. [**`setenv.bat`**](setenv.bat) - This batch command makes external tools such as [**`javac.exe`**](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html), [**`scalac.bat`**](https://docs.scala-lang.org/overviews/compiler-options/index.html), [**`dotc.bat`**](bin/0.16/dotc.bat), etc. directly available from the command prompt (see section [**Project dependencies**](#section_01)).
+1. [**`setenv.bat`**](setenv.bat) - This batch command makes external tools such as [**`javac.exe`**](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javac.html), [**`mvn.cmd`**](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html) or [**`cl.exe`**](https://docs.microsoft.com/en-us/cpp/build/reference/compiling-a-c-cpp-program?view=vs-2019) directly available from the command prompt (see section [**Project dependencies**](#section_01)).
 
     <pre style="font-size:80%;">
     <b>&gt; setenv help</b>
@@ -117,15 +117,14 @@ We distinguish different sets of batch commands:
 
 4. [**`sl.bat`**](sl.bat) - This batch command performs the same operations as the corresponding shell script [**`sl`**](sl) (called from [Travis job](https://docs.travis-ci.com/user/job-lifecycle/) **`script`** in file [**`.travis.yml`**](.travis.yml)).
 
-
-    > **:mag_right:** Batch file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is a minimized version of [**`sl.bat`**](sl.bat); command [**`build dist`**](build.bat) does add it to the generated binary distribution.
-
 5. [**`component\clean_component.bat`**](component/clean_component.bat) and [**`component\make_component.bat`**](component/make_component.bat) - These two batch commands are called from the POM file [**`component\pom.xml`**](component/pom.xml).
 
-6. [**`native\clean_native.bat`**](native/clean_native.bat) and [**`native\make_native.bat`**](native/make_native.bat) - These two batch commands are called from the POM file [**`native\pom.xml`**](native/pom.xml).
+6. [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) - This batch command is a minimized version of [**`sl.bat`**](sl.bat); command [**`build dist`**](build.bat) does add it to the generated binary distribution (see [**next section**](#section_04)).
+
+7. [**`native\clean_native.bat`**](native/clean_native.bat) and [**`native\make_native.bat`**](native/make_native.bat) - These two batch commands are called from the POM file [**`native\pom.xml`**](native/pom.xml).
 
 
-## Usage examples
+## <span id="section_04">Usage examples</span>
 
 #### `setenv.bat`
 
@@ -324,10 +323,10 @@ W:\TARGET
 
 Command [**`generate_parser test`**](generate_parser.bat) creates a test class **`SimpleLanguageMainTest.java`** and compiles/executes it together with the lexer/parser files from directory **`target\parser\src\`**. 
 
-Output directory **`target\parser\`** now contains three new elements:<br/>
+Output directory **`target\parser\`** now contains three additional elements:<br/>
 - the [argument file](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#commandlineargfile) **`source_list.txt`**<br/>
-- the source file **`src\SimpleLanguageMainTest.java`**<br/>
-- the subdirectory **`target\parser\classes\`**:
+- the source file **`src\SimpleLanguageMainTest.java`** (generated)<br/>
+- the subdirectory **`classes\**\*.class`**:
 
 <pre style="font-size:80%;">
 <b>&gt; tree /f target</b>
@@ -379,7 +378,7 @@ SimpleLanguage Example
 7000000000000
 </pre>
 
-> **:mag_right:** Source file **`SimpleLanguageMainTest.java`** <sup id="anchor_02">[[2]](#footnote_02)</sup> is a minimized version of [**`SLMain.java`**](https://github.com/graalvm/simplelanguage/blob/master/launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) available from the [**`graalvm/simplelanguage`**](https://github.com/graalvm/simplelanguage) project.
+> **:mag_right:** Source file **`SimpleLanguageMainTest.java`** <sup id="anchor_03">[[3]](#footnote_03)</sup> is a minimized version of [**`SLMain.java`**](https://github.com/graalvm/simplelanguage/blob/master/launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) available from the [**`graalvm/simplelanguage`**](https://github.com/graalvm/simplelanguage) project.
 
 Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`generate_parser -debug test`**](generate_parser.bat)) displays the internally executed commands:
 
@@ -418,7 +417,13 @@ SimpleLanguage Example
 
 ## Footnotes
 
-<a name="footnote_01">[1]</a> ***2018-09-24*** [↩](#anchor_01)
+<a name="footnote_01">[1]</a> [↩](#anchor_01)
+
+<div style="margin:0 0 1em 20px;">
+<a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
+</div>
+
+<a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
 
 <div style="margin:0 0 1em 20px;">
 The two Microsoft software listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file are available for free.<br/>
@@ -437,38 +442,38 @@ VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
 </pre>
 </div>
 
-<a name="footnote_02">[2]</a> [↩](#anchor_02)
+<a name="footnote_03">[3]</a> [↩](#anchor_02)
 
 <div style="margin:0 0 1em 20px;">
 The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks as follows:
 <pre style="font-size:80%;">
-package com.oracle.truffle.sl.parser;
+<b>package</b> com.oracle.truffle.sl.parser;
 &nbsp;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+<b>import</b> java.io.File;
+<b>import</b> java.util.HashMap;
+<b>import</b> java.util.Map;
 &nbsp;
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.Source;
-import org.graalvm.polyglot.Value;
+<b>import</b> org.graalvm.polyglot.Context;
+<b>import</b> org.graalvm.polyglot.Source;
+<b>import</b> org.graalvm.polyglot.Value;
 
-public final class SimpleLanguageMainTest {
-    private static final String SL = "sl";
+<b>public final class</b> SimpleLanguageMainTest {
+    <b>private static final</b> String SL = "sl";
     &nbsp;
-    public static void main(String[] args) throws Exception {
-        Map<String, String> options = new HashMap<>();
+    <b>public static void</b> main(String[] args) <b>throws</b> Exception {
+        Map<String, String> options = <b>new</b> HashMap<>();
     &nbsp;
         System.out.println("SimpleLanguage Example");
-        Source source = Source.newBuilder(SL, new File(args[0])).build();
+        Source source = Source.newBuilder(SL, <b>new</b> File(args[0])).build();
         Context context = Context.newBuilder(SL).in(System.in).out(System.out).options(options).build();
         System.out.println("== running on " + context.getEngine());
         Value result = context.eval(source);
-        if (context.getBindings(SL).getMember("main") == null) {
+        <b>if</b> (context.getBindings(SL).getMember("main") == <b>null</b>) {
             context.close();
             System.err.println("No function main(^) defined in SL source file.");
             System.exit(1);
         }
-        if (!result.isNull()) {
+        <b>if</b> (!result.isNull()) {
             System.out.println(result.toString());
         }
         context.close();
