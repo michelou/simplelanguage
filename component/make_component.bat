@@ -53,22 +53,41 @@ if not %_EXITCODE%==0 goto end
 call :mkdir "%_LANGUAGE_PATH%"
 if not %_EXITCODE%==0 goto end
 copy /y "%_LANGUAGE_DIR%\target\simplelanguage.jar" "%_LANGUAGE_PATH%\" 1>NUL
-
+if not %ERRORLEVEL%==0 (
+    set _EXITCODE=1
+    goto end
+)
 call :mkdir "%_LANGUAGE_PATH%\launcher"
 if not %_EXITCODE%==0 goto end
 copy /y "%_LAUNCHER_DIR%\target\sl-launcher.jar" "%_LANGUAGE_PATH%\launcher\" 1>NUL
-
+if not %ERRORLEVEL%==0 (
+    set _EXITCODE=1
+    goto end
+)
 call :mkdir "%_LANGUAGE_PATH%\bin"
 if not %_EXITCODE%==0 goto end
 copy /y "%_ROOT_DIR%sl.bat" "%_LANGUAGE_PATH%\bin\" 1>NUL
-
+if not %ERRORLEVEL%==0 (
+    set _EXITCODE=1
+    goto end
+)
 if defined _INCLUDE_SLNATIVE (
     copy /y "%_NATIVE_DIR%\slnative.exe" "%_LANGUAGE_PATH%\bin\" 1>NUL
+    if not !ERRORLEVEL!==0 (
+        set _EXITCODE=1
+        goto end
+    )
 )
 
 call :mkdir "%_TARGET_DIR%"
 if not %_EXITCODE%==0 goto end
 
+rem touch (empty) file
+copy /y nul "%_LANGUAGE_PATH%\native-image.properties" 1>NUL
+if not %ERRORLEVEL%==0 (
+    set _EXITCODE=1
+    goto end
+)
 call :mkdir "%_META_INF_DIR%"
 if not %_EXITCODE%==0 goto end
 (

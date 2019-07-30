@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 setlocal enabledelayedexpansion
 
 rem only for interactive debugging !
@@ -117,18 +117,21 @@ goto :eof
 
 :clean
 for %%f in ("%_COMPONENT_DIR%\target" "%_LANGUAGE_DIR%\target" "%_LAUNCHER_TARGET_DIR%" "%_NATIVE_TARGET_DIR%" "%_TARGET_DIR%") do (
-    set __DIR=%%~f
-    if exist "!__DIR!\" (
-        if %_DEBUG%==1 ( echo [%_BASENAME%] rmdir /s /q "!__DIR!"
-        ) else if %_VERBOSE%==1 ( echo Delete directory "!__DIR!"
-        )
-        rmdir /s /q "!__DIR!"
-        if not !ERRORLEVEL!==0 (
-            set _EXITCODE=1
-            rem try to remove next directory
-            rem goto :eof
-        )
-    )
+    call :rmdir "%%~f"
+)
+goto :eof
+
+rem input parameter: %1=directory path
+:rmdir
+set __DIR=%~1
+if not exist "!__DIR!\" goto :eof
+if %_DEBUG%==1 ( echo [%_BASENAME%] rmdir /s /q "!__DIR!"
+) else if %_VERBOSE%==1 ( echo Delete directory "!__DIR!"
+)
+rmdir /s /q "!__DIR!"
+if not %ERRORLEVEL%==0 (
+    set _EXITCODE=1
+    goto :eof
 )
 goto :eof
 

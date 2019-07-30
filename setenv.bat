@@ -25,6 +25,8 @@ rem ## Main
 set _GRAAL_PATH=
 set _MVN_PATH=
 set _GIT_PATH=
+set _MSVC_PATH=
+set _SDK_PATH=
 
 call :graal
 if not %_EXITCODE%==0 goto end
@@ -35,8 +37,8 @@ if not %_EXITCODE%==0 goto end
 call :git
 if not %_EXITCODE%==0 goto end
 
-call :msvs
-rem call :msvs_2019
+call :msvc
+rem call :msvc_2019
 if not %_EXITCODE%==0 goto end
 
 call :sdk
@@ -62,6 +64,7 @@ if not defined __ARG (
     set /a __N=!__N!+1
 )
 if /i "%__ARG%"=="help" ( set _HELP=1
+) else if /i "%__ARG%"=="-debug" ( set _DEBUG=1
 ) else if /i "%__ARG%"=="-help" ( set _HELP=1
 ) else if /i "%__ARG%"=="-nosdk" ( set _USE_SDK=0
 ) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
@@ -79,10 +82,11 @@ goto :eof
 :help
 echo Usage: %_BASENAME% { options ^| subcommands }
 echo   Options:
-echo     -nosdk           don't setup Windows SDK environment ^(SetEnv.cmd^)
-echo     -verbose         display environment settings
+echo     -debug      show commands executed by this script
+echo     -nosdk      don't setup Windows SDK environment ^(SetEnv.cmd^)
+echo     -verbose    display environment settings
 echo   Subcommands:
-echo     help             display this help message
+echo     help        display this help message
 goto :eof
 
 :graal
@@ -172,7 +176,7 @@ set "_GIT_PATH=;%_GIT_HOME%\bin;%_GIT_HOME%\usr\bin"
 goto :eof
 
 rem native-image dependency
-:msvs
+:msvc
 set "_MSVS_HOME=C:\Program Files (x86)\Microsoft Visual Studio 10.0"
 if not exist "%_MSVS_HOME%" (
     echo Error: Could not find installation directory for Microsoft Visual Studio 10 1>&2
@@ -182,15 +186,23 @@ if not exist "%_MSVS_HOME%" (
 )
 rem From now on use short name of MSVS installation path
 for %%f in ("%_MSVS_HOME%") do set _MSVS_HOME=%%~sf
+
 set _MSVC_HOME=%_MSVS_HOME%\VC
 set __MSVC_ARCH=
 if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __MSVC_ARCH=\amd64
-set "_MSVS_PATH=;%_MSVC_HOME%\bin%__MSVC_ARCH%"
+set "_MSVC_PATH=;%_MSVC_HOME%\bin%__MSVC_ARCH%"
 goto :eof
 
 rem native-image dependency
-:msvs_2019
-set "_MSVS_HOME=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community"
+:msvc_2019
+set "_VSWHERE_CMD=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+if not exist "%_VSWHERE_CMD%" (
+    echo Error: Could not find any Microsoft Visual Studio installation 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+rem 15.x --> 2017, 16.x --> 2019
+for /f %%f in ('"%_VSWHERE_CMD%" -property installationPath -version [16.0^,17.0^)') do set _MSVS_HOME=%%~f
 if not exist "%_MSVS_HOME%" (
     echo Error: Could not find installation directory for Microsoft Visual Studio 2019 1>&2
     set _EXITCODE=1
@@ -198,10 +210,20 @@ if not exist "%_MSVS_HOME%" (
 )
 rem From now on use short name of MSVS installation path
 for %%f in ("%_MSVS_HOME%") do set _MSVS_HOME=%%~sf
-set _MSVC_HOME=%_MSVS_HOME%\VC\Tools\MSVC\14.21.27702
-set __MSVC_ARCH=\Hostx86\x86
-if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __MSVC_ARCH=\Hostx64\x64
-set "_MSVS_PATH=;%_MSVC_HOME%\bin%__MSVC_ARCH%"
+
+set __MSVC_BIN_DIR=
+set __MSVC_ARCH=x86\x86
+if "%PROCESSOR_ARCHITECTURE%"=="AMD64" set __MSVC_ARCH=x64\x64
+for /f %%f in ('where /r "%_MSVS_HOME%" cl.exe ^| findstr "%__MSVC_ARCH%"') do (
+    for %%i in (%%f) do set __MSVC_BIN_DIR=%%dpi
+)
+if not exist "%__MSVC_BIN_DIR%" (
+    echo Error: Could not find Microsoft C/C++ compiler for architecture %__MSVC_ARCH% 1>&2
+    set _EXITCODE=1
+    goto :eof
+)
+for %%f in ("%__MSVC_BIN_DIR%\..\..\..") do set _MSVC_HOME=%%f
+set "_MSVC_PATH=;%__MSVC_BIN_DIR%"
 goto :eof
 
 rem native-image dependency
@@ -291,7 +313,7 @@ endlocal & (
         if not defined MSVC_HOME set MSVC_HOME=%_MSVC_HOME%
         if not defined SDK_HOME set SDK_HOME=%_SDK_HOME%
     )
-    set "PATH=%_GRAAL_PATH%%PATH%%_MVN_PATH%%_GIT_PATH%%_MSVS_PATH%%_SDK_PATH%"
+    set "PATH=%_GRAAL_PATH%%PATH%%_MVN_PATH%%_GIT_PATH%%_MSVC_PATH%%_SDK_PATH%"
     call :print_env %_VERBOSE%
     if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
     for /f "delims==" %%i in ('set ^| findstr /b "_"') do set %%i=
