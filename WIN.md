@@ -3,7 +3,7 @@
 <table style="font-family:Helvetica,Arial;font-size:14px;line-height:1.6;">
   <tr>
   <td style="border:0;padding:0 10px 0 0;min-width:60px;max-width:100px;">
-    <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png"/></a>
+    <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png" alt="GraalVM"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
     In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine. In particular we generate both the JVM version and the native version of the Java application.
@@ -26,7 +26,7 @@ Optionally one may also install the following software:
 
 > **:mag_right:** Git for Windows provides a BASH emulation used to run [**`git`**](https://git-scm.com/docs/git) from the command line (as well as over 250 Unix commands like [**`awk`**](https://www.linux.org/docs/man1/awk.html), [**`diff`**](https://www.linux.org/docs/man1/diff.html), [**`file`**](https://www.linux.org/docs/man1/file.html), [**`grep`**](https://www.linux.org/docs/man1/grep.html), [**`more`**](https://www.linux.org/docs/man1/more.html), [**`mv`**](https://www.linux.org/docs/man1/mv.html), [**`rmdir`**](https://www.linux.org/docs/man1/rmdir.html), [**`sed`**](https://www.linux.org/docs/man1/sed.html) and [**`wc`**](https://www.linux.org/docs/man1/wc.html)).
 
-For instance our development environment looks as follows (*July 2019*):
+For instance our development environment looks as follows (*August 2019*):
 
 <pre style="font-size:80%;">
 C:\opt\apache-maven-3.6.1\                            <i>( 10 MB)</i>
@@ -57,12 +57,12 @@ setenv.bat
 sl.bat
 </pre>
 
-We also define a virtual drive **`W:`** in our working environment in order to reduce/hide the real path of our project directory (see article ["Windows command prompt limitation"](https://support.microsoft.com/en-gb/help/830473/command-prompt-cmd-exe-command-line-string-limitation) from Microsoft Support).
+We also define a virtual drive **`S:`** in our working environment in order to reduce/hide the real path of our project directory (see article ["Windows command prompt limitation"](https://support.microsoft.com/en-gb/help/830473/command-prompt-cmd-exe-command-line-string-limitation) from Microsoft Support).
 
 > **:mag_right:** We use the Windows external command [**`subst`**](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/subst) to create virtual drives; for instance:
 >
 > <pre style="font-size:80%;">
-> <b>&gt; subst W: %USERPROFILE%\workspace\simplelanguage</b>
+> <b>&gt; subst S: %USERPROFILE%\workspace\simplelanguage</b>
 > </pre>
 
 In the next section we give a brief description of the added batch files.
@@ -86,7 +86,7 @@ We distinguish different sets of batch commands:
        cl 16.00.40219.01 for x64, uuidgen v1.01
     </pre>
 
-2. [**`build.bat`**](build.bat) - This batch command is the most useful script in this project; it provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the ANTLR parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
+2. [**`build.bat`**](build.bat) - This batch command is the most useful script in this project; it provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the [ANTLR](https://www.antlr.org/i) parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
 
     <pre style="font-size:80%;">
     <b>&gt; build help</b>
@@ -422,7 +422,7 @@ SimpleLanguage Example
 <div style="margin:0 0 1em 20px;">
 <a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
 </div>
-
+<p/>
 <a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
 
 <div style="margin:0 0 1em 20px;">
@@ -441,7 +441,7 @@ GRMSDKX_EN_DVD.iso                  <i>(570 MB)</i>
 VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
 </pre>
 </div>
-
+<p/>
 <a name="footnote_03">[3]</a> [↩](#anchor_02)
 
 <div style="margin:0 0 1em 20px;">
@@ -456,13 +456,13 @@ The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks 
 <b>import</b> org.graalvm.polyglot.Context;
 <b>import</b> org.graalvm.polyglot.Source;
 <b>import</b> org.graalvm.polyglot.Value;
-
+&nbsp;
 <b>public final class</b> SimpleLanguageMainTest {
-    <b>private static final</b> String SL = "sl";
-    &nbsp;
-    <b>public static void</b> main(String[] args) <b>throws</b> Exception {
-        Map<String, String> options = <b>new</b> HashMap<>();
-    &nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<b>private static final</b> String SL = "sl";
+
+&nbsp;&nbsp;&nbsp;&nbsp;<b>public static void</b> main(String[] args) <b>throws</b> Exception {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Map<String, String> options = <b>new</b> HashMap<>();
+    
         System.out.println("SimpleLanguage Example");
         Source source = Source.newBuilder(SL, <b>new</b> File(args[0])).build();
         Context context = Context.newBuilder(SL).in(System.in).out(System.out).options(options).build();
@@ -478,7 +478,7 @@ The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks 
         }
         context.close();
         System.exit(0);
-    }
+&nbsp;&nbsp;&nbsp;&nbsp;}
 }
 </pre>
 </div>
@@ -500,5 +500,5 @@ The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks 
 
 ###################### COMMENT (END) ########################## -->
 
-*[mics](http://lampwww.epfl.ch/~michelou/)/July 2019* [**&#9650;**](#top)
+*[mics](http://lampwww.epfl.ch/~michelou/)/August 2019* [**&#9650;**](#top)
 <span id="bottom">&nbsp;</span>
