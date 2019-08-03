@@ -126,7 +126,7 @@ rem input parameter: %1=directory path
 set __DIR=%~1
 if not exist "!__DIR!\" goto :eof
 if %_DEBUG%==1 ( echo [%_BASENAME%] rmdir /s /q "!__DIR!"
-) else if %_VERBOSE%==1 ( echo Delete directory "!__DIR!"
+) else if %_VERBOSE%==1 ( echo Delete directory !__DIR!
 )
 rmdir /s /q "!__DIR!"
 if not %ERRORLEVEL%==0 (

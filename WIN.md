@@ -77,13 +77,10 @@ We distinguish different sets of batch commands:
     <b>&gt; setenv help</b>
     Usage: setenv { options | subcommands }
       Options:
-        -nosdk           don't setup Windows SDK environment (SetEnv.cmd)
-        -verbose         display environment settings
+        -nosdk      don't setup Windows SDK environment (SetEnv.cmd)
+        -verbose    display environment settings
       Subcommands:
-        help             display this help message
-    Tool versions:
-       javac 1.8.0_222, mvn 3.6.1, git 2.22.0.windows.1, diff 3.7
-       cl 16.00.40219.01 for x64, uuidgen v1.01
+        help        display this help message
     </pre>
 
 2. [**`build.bat`**](build.bat) - This batch command is the most useful script in this project; it provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the [ANTLR](https://www.antlr.org/i) parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
@@ -167,11 +164,11 @@ Command [**`build -verbose clean`**](build.bat) deletes all output directories.
 
 <pre style="font-size:80%;">
 <b>&gt; build -verbose clean</b>
-Delete directory "W:\component\target"
-Delete directory "W:\language\target"
-Delete directory "W:\launcher\target"
-Delete directory "W:\native\target"
-Delete directory "W:\target"
+Delete directory S:\component\target
+Delete directory S:\language\target
+Delete directory S:\launcher\target
+Delete directory S:\native\target
+Delete directory S:\target
 </pre>
 
 > **:mag_right:** Unlike the other shell scripts [**`component\make_component.sh`**](component/make_component.sh) generates its output directly into directory **`component\`** instead of **`component\target\`**. We changed that behavior: the corresponding batch file [**`component\make_component.bat`**](component/make_component.bat) generates its output into directory **`component\target\`**.
@@ -200,23 +197,23 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO]
 [INFO] --- exec-maven-plugin:1.6.0:exec (make_native) @ simplelanguage-graalvm-native ---
-[W:\\native\target\slnative:3432]    classlist:   2,794.53 ms
-[W:\\native\target\slnative:3432]        (cap):  23,393.11 ms
-[W:\\native\target\slnative:3432]        setup:  24,715.09 ms
-[W:\\native\target\slnative:3432]   (typeflow):  13,055.30 ms
-[W:\\native\target\slnative:3432]    (objects):  10,122.69 ms
-[W:\\native\target\slnative:3432]   (features):   2,000.37 ms
-[W:\\native\target\slnative:3432]     analysis:  26,150.04 ms
-[W:\\native\target\slnative:3432]     (clinit):     529.91 ms
+[S:\\native\target\slnative:3432]    classlist:   2,794.53 ms
+[S:\\native\target\slnative:3432]        (cap):  23,393.11 ms
+[S:\\native\target\slnative:3432]        setup:  24,715.09 ms
+[S:\\native\target\slnative:3432]   (typeflow):  13,055.30 ms
+[S:\\native\target\slnative:3432]    (objects):  10,122.69 ms
+[S:\\native\target\slnative:3432]   (features):   2,000.37 ms
+[S:\\native\target\slnative:3432]     analysis:  26,150.04 ms
+[S:\\native\target\slnative:3432]     (clinit):     529.91 ms
 1349 method(s) included for runtime compilation              
-[W:\\native\target\slnative:3432]     universe:   1,655.70 ms
-[W:\\native\target\slnative:3432]      (parse):   2,496.46 ms
-[W:\\native\target\slnative:3432]     (inline):   3,769.89 ms
-[W:\\native\target\slnative:3432]    (compile):  22,064.46 ms
-[W:\\native\target\slnative:3432]      compile:  30,115.63 ms
-[W:\\native\target\slnative:3432]        image:   2,829.75 ms
-[W:\\native\target\slnative:3432]        write:     753.58 ms
-[W:\\native\target\slnative:3432]      [total]:  90,272.90 ms
+[S:\\native\target\slnative:3432]     universe:   1,655.70 ms
+[S:\\native\target\slnative:3432]      (parse):   2,496.46 ms
+[S:\\native\target\slnative:3432]     (inline):   3,769.89 ms
+[S:\\native\target\slnative:3432]    (compile):  22,064.46 ms
+[S:\\native\target\slnative:3432]      compile:  30,115.63 ms
+[S:\\native\target\slnative:3432]        image:   2,829.75 ms
+[S:\\native\target\slnative:3432]        write:     753.58 ms
+[S:\\native\target\slnative:3432]      [total]:  90,272.90 ms
 [INFO]     
 [INFO] ------------< com.oracle:simplelanguage-graalvm-component >-------------
 [INFO] Building simplelanguage-graalvm-component 19.1.1-SNAPSHOT          [5/5]
@@ -237,7 +234,7 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO] Total time:  01:49 min
 [INFO] Finished at: 2019-07-24T08:14:18+02:00
 [INFO] ------------------------------------------------------------------------
-Copy executable W:\native\target\slnative.exe to directory W:\target\sl\bin
+Copy executable S:\native\target\slnative.exe to directory S:\target\sl\bin
 </pre>
 
 > **:mag_right:** Omitting option **`-native`** (which controls the **`SL_BUILD_NATIVE`** environment variable) will skip step 4:
@@ -252,7 +249,7 @@ Output directory is **`target\sl\`**; its structure looks as follows:
 
 <pre style="font-size:80%;">
 <b>&gt; tree /f target</b>
-W:\TARGET
+S:\TARGET
 └───sl
     ├───bin
     │       sl.bat
@@ -267,12 +264,12 @@ W:\TARGET
 > **:mag_right:** As expected the file sizes for the JVM and native versions are very different:
 > <pre style="font-size:80%;">
 > <b>&gt; where /t /r target\sl\lib *.jar</b>
->    337904   22.07.2019      18:41:46  W:\target\sl\lib\antlr4-runtime-4.7.2.jar
->      4945   24.07.2019      12:53:37  W:\target\sl\lib\launcher-19.1.1-SNAPSHOT.jar
->    339575   24.07.2019      12:53:37  W:\target\sl\lib\simplelanguage-19.1.1-SNAPSHOT.jar
+>    337904   22.07.2019      18:41:46  S:\target\sl\lib\antlr4-runtime-4.7.2.jar
+>      4945   24.07.2019      12:53:37  S:\target\sl\lib\launcher-19.1.1-SNAPSHOT.jar
+>    339575   24.07.2019      12:53:37  S:\target\sl\lib\simplelanguage-19.1.1-SNAPSHOT.jar
 >
 > <b>&gt; where /t /r target\sl\bin *.exe</b>
->  26853376   24.07.2019      13:09:57  W:\target\sl\bin\slnative.exe
+>  26853376   24.07.2019      13:09:57  S:\target\sl\bin\slnative.exe
 > </pre>
 
 We can now execute the two versions (JVM and native) of our application:
@@ -307,7 +304,7 @@ Output directory is **`target\parser\`**; its structure looks as follows:
 
 <pre style="font-size:80%;">
 <b>&gt; tree /f target</b>
-W:\TARGET
+S:\TARGET
 └───parser
     ├───libs
     │       antlr-4.7.2-complete.jar
@@ -330,7 +327,7 @@ Output directory **`target\parser\`** now contains three additional elements:<br
 
 <pre style="font-size:80%;">
 <b>&gt; tree /f target</b>
-W:\TARGET
+S:\TARGET
 └───parser
     │   source_list.txt
     │
@@ -363,9 +360,9 @@ Adding option **`-verbose`** to the above command (i.e. [**`generate_parser -ver
 
 <pre style="font-size:80%;">
 <b>&gt; generate_parser -verbose test</b>
-Generate ANTLR parser files into directory W:\target\parser\src
-Generate test class SimpleLanguageMainTest.java into directory W:\target\parser\src
-Compile Java source files to directory W:\target\parser\classes
+Generate ANTLR parser files into directory S:\target\parser\src
+Generate test class SimpleLanguageMainTest.java into directory S:\target\parser\src
+Compile Java source files to directory S:\target\parser\classes
 Execute test with SimpleLangage example tests\Add.sl
 SimpleLanguage Example
 == running on org.graalvm.polyglot.Engine@e580929
@@ -385,9 +382,9 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 <pre style="font-size:80%;">
 <b>&gt; generate_parser -debug test</b>
 [generate_parser] _DEBUG=1 _TEST=1 _VERBOSE=0
-[generate_parser] java.exe -cp W:\target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener W:\language\src\main\java\com\oracle\truffle\sl\parser\SimpleLanguage.g4 -o W:\target\parser\src
-[generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;W:\target\parser\libs\antlr-4.7.2-complete.jar;W:\target\parser\classes -d "W:\target\parser\classes" @"W:\target\parser\source_list.txt"
-[generate_parser] java.exe  -Dtruffle.class.path.append=W:\target\parser\libs\antlr-4.7.2-complete.jar;W:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;W:\target\parser\libs\antlr-4.7.2-complete.jar;W:\target\parser\classes com.oracle.truffle.sl.parser.SimpleLanguageMainTest "W:\language\tests\Add.sl"
+[generate_parser] java.exe -cp S:\target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener S:\language\src\main\java\com\oracle\truffle\sl\parser\SimpleLanguage.g4 -o S:\target\parser\src
+[generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
+[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SimpleLanguageMainTest "S:\language\tests\Add.sl"
 SimpleLanguage Example
 == running on org.graalvm.polyglot.Engine@56cbfb61
 7
@@ -422,12 +419,12 @@ SimpleLanguage Example
 <div style="margin:0 0 1em 20px;">
 <a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
 </div>
-<p/>
+
 <a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
 
 <div style="margin:0 0 1em 20px;">
 The two Microsoft software listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file are available for free.<br/>
-Okay, that's fine but... what version should you download ? The <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> is:
+Okay, that's fine but... what version should you download ? We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> on StackOverflow:
 <pre style="font-size:80%;">
 GRMSDK_EN_DVD.iso is a version for x86 environment.
 GRMSDKX_EN_DVD.iso is a version for x64 environment.
@@ -435,14 +432,14 @@ GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 </pre>
 In our case we downloaded the following installation files (see <a href="#section_01">section 1</a>):
 <pre style="font-size:80%;">
-apache-maven-3.6.1-bin.zip          <i>(  8 MB)</i>
+<a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
 graalvm-ce-windows-amd64-19.1.1.zip <i>(179 MB)</i>
 GRMSDKX_EN_DVD.iso                  <i>(570 MB)</i>
 VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
 </pre>
 </div>
 <p/>
-<a name="footnote_03">[3]</a> [↩](#anchor_02)
+<a name="footnote_03">[3]</a> [↩](#anchor_03)
 
 <div style="margin:0 0 1em 20px;">
 The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks as follows:
@@ -459,10 +456,10 @@ The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks 
 &nbsp;
 <b>public final class</b> SimpleLanguageMainTest {
 &nbsp;&nbsp;&nbsp;&nbsp;<b>private static final</b> String SL = "sl";
-
+&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;<b>public static void</b> main(String[] args) <b>throws</b> Exception {
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Map<String, String> options = <b>new</b> HashMap<>();
-    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Map<String, String> options = <b>new</b> HashMap<>();
+&nbsp;
         System.out.println("SimpleLanguage Example");
         Source source = Source.newBuilder(SL, <b>new</b> File(args[0])).build();
         Context context = Context.newBuilder(SL).in(System.in).out(System.out).options(options).build();
