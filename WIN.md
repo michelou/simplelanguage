@@ -60,7 +60,7 @@ WIN.md
 
 where
 
-- directory [**`component\`**](components/) contains two additional batch files.
+- directory [**`component\`**](component/) contains two additional batch files.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
 - directory [**`native\`**](native/) contains two additiona batch files.
 - file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** and others tasks.
@@ -126,7 +126,7 @@ We distinguish different sets of batch commands:
 
 4. [**`sl.bat`**](sl.bat) - This batch command performs the same operations as the corresponding shell script [**`sl`**](sl) (called from [Travis job](https://docs.travis-ci.com/user/job-lifecycle/) **`script`** in file [**`.travis.yml`**](.travis.yml)).
 
-5. [**`component\clean_component.bat`**](component/clean_component.bat) and [**`component\make_component.bat`**](component/make_component.bat) - These two batch commands are called from the POM file [**`component\pom.xml`**](component/pom.xml) in the same manner as their shell equivalents.
+5. [**`component\clean_component.bat`**](component/clean_component.bat) and [**`component\make_component.bat`**](component/make_component.bat) - These two batch commands are called from the POM file [**`component\pom.xml`**](component/pom.xml) as their shell equivalents.
 
 6. [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) - This batch command is a minimized version of [**`sl.bat`**](sl.bat); command [**`build dist`**](build.bat) does add it to the generated binary distribution (see [**next section**](#section_04)).
 
@@ -310,7 +310,7 @@ We can now execute the two versions (JVM and native) of our application:
 7000000000000
 </pre>
 
-> **:mag_right:** For instance command [**`dumpbin`**](https://docs.microsoft.com/en-us/cpp/build/reference/dumpbin-reference?view=vs-2019) displays the definitions exported from file **`slnative.exe`** whose name starts with **`graal_`**:
+> **:mag_right:** For instance we can use command [**`dumpbin`**](https://docs.microsoft.com/en-us/cpp/build/reference/dumpbin-reference?view=vs-2019) to display the definitions exported from executable **`slnative.exe`** whose name starts with **`graal_`**:
 > <pre style="font-size:80%;">
 > <b>&gt; dumpbin /exports target\sl\bin\slnative.exe | awk '/[A-F0-9] graal_/ {print $4}'</b>
 > graal_attach_thread
