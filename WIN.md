@@ -6,7 +6,7 @@
     <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png" alt="GraalVM"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
-    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine. In particular we generate both the JVM version and the native version of the Java application.
+    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the Java application.
   </td>
   </tr>
 </table>
@@ -55,7 +55,19 @@ build.bat
 generate_parser.bat
 setenv.bat
 sl.bat
+WIN.md
 </pre>
+
+where
+
+- directory [**`component\`**](components/) contains two additional batch files.
+- file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
+- directory [**`native\`**](native/) contains two additiona batch files.
+- file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** and others tasks.
+- file [**`generate_parser.bat`**](generate_parser.bat) is the batch script for generating the SL parser source files.
+- file [**`setenv.bat`**](setenv.bat) is the batch script for setting up our environment.
+- file [**`sl.bat`**](sl.bat) is the batch script for executing the generated SL parser.
+- file [**`WIN.md`**](WIN.md) is the Markdown document of this page.
 
 We also define a virtual drive **`S:`** in our working environment in order to reduce/hide the real path of our project directory (see article ["Windows command prompt limitation"](https://support.microsoft.com/en-gb/help/830473/command-prompt-cmd-exe-command-line-string-limitation) from Microsoft Support).
 
@@ -78,7 +90,7 @@ We distinguish different sets of batch commands:
     Usage: setenv { options | subcommands }
       Options:
         -nosdk      don't setup Windows SDK environment (SetEnv.cmd)
-        -verbose    display environment settings
+        -verbose    display progress messages
       Subcommands:
         help        display this help message
     </pre>
@@ -114,11 +126,11 @@ We distinguish different sets of batch commands:
 
 4. [**`sl.bat`**](sl.bat) - This batch command performs the same operations as the corresponding shell script [**`sl`**](sl) (called from [Travis job](https://docs.travis-ci.com/user/job-lifecycle/) **`script`** in file [**`.travis.yml`**](.travis.yml)).
 
-5. [**`component\clean_component.bat`**](component/clean_component.bat) and [**`component\make_component.bat`**](component/make_component.bat) - These two batch commands are called from the POM file [**`component\pom.xml`**](component/pom.xml).
+5. [**`component\clean_component.bat`**](component/clean_component.bat) and [**`component\make_component.bat`**](component/make_component.bat) - These two batch commands are called from the POM file [**`component\pom.xml`**](component/pom.xml) in the same manner as their shell equivalents.
 
 6. [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) - This batch command is a minimized version of [**`sl.bat`**](sl.bat); command [**`build dist`**](build.bat) does add it to the generated binary distribution (see [**next section**](#section_04)).
 
-7. [**`native\clean_native.bat`**](native/clean_native.bat) and [**`native\make_native.bat`**](native/make_native.bat) - These two batch commands are called from the POM file [**`native\pom.xml`**](native/pom.xml).
+7. [**`native\clean_native.bat`**](native/clean_native.bat) and [**`native\make_native.bat`**](native/make_native.bat) - These two batch commands are called from the POM file [**`native\pom.xml`**](native/pom.xml) as their shell equivalents.
 
 
 ## <span id="section_04">Usage examples</span>
@@ -131,7 +143,7 @@ Command [**`setenv`**](setenv.bat) is executed once to setup our development env
 <b>&gt; setenv</b>
 Tool versions:
    javac 1.8.0_222, mvn 3.6.1, git 2.22.0.windows.1, diff 3.7
-   cl 16.00.40219.01 for x64, uuidgen v1.01
+   cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 
 <b>&gt; where javac mvn</b>
 C:\opt\graalvm-ce-19.1.1\bin\javac.exe
@@ -145,14 +157,16 @@ Command [**`setenv -verbose`**](setenv.bat) also displays the tool paths:
 <b>&gt; setenv -verbose</b>
 Tool versions:
    javac 1.8.0_222, mvn 3.6.1, git 2.22.0.windows.1, diff 3.7
-   cl 16.00.40219.01 for x64, uuidgen v1.01
+   cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 Tool paths:
    C:\opt\graalvm-ce-19.1.1\bin\javac.exe
    C:\opt\apache-maven-3.6.1\bin\mvn.cmd
    C:\opt\Git-2.22.0\bin\git.exe
    C:\opt\Git-2.22.0\usr\bin\diff.exe
    C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\cl.exe
+   c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\dumpbin.exe
    C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\x64\Uuidgen.Exe
+   C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\Uuidgen.Exe
 </pre>
 
 
@@ -296,6 +310,19 @@ We can now execute the two versions (JVM and native) of our application:
 7000000000000
 </pre>
 
+> **:mag_right:** For instance command [**`dumpbin`**](https://docs.microsoft.com/en-us/cpp/build/reference/dumpbin-reference?view=vs-2019) displays the definitions exported from file **`slnative.exe`** whose name starts with **`graal_`**:
+> <pre style="font-size:80%;">
+> <b>&gt; dumpbin /exports target\sl\bin\slnative.exe | awk '/[A-F0-9] graal_/ {print $4}'</b>
+> graal_attach_thread
+> graal_create_isolate
+> graal_detach_thread
+> graal_detach_threads
+> graal_get_current_thread
+> graal_get_isolate
+> graal_tear_down_isolate
+> </pre>
+
+
 #### `generate_parser.bat`
 
 Command [**`generate_parser`**](generate_parser.bat) with no arguments produces the lexer/parser files for the [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example.
@@ -416,34 +443,36 @@ SimpleLanguage Example
 
 <a name="footnote_01">[1]</a> [↩](#anchor_01)
 
-<div style="margin:0 0 1em 20px;">
+<p style="margin:0 0 1em 20px;">
 <a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
-</div>
+</p>
 
 <a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
 
-<div style="margin:0 0 1em 20px;">
+<p style="margin:0 0 1em 20px;">
 The two Microsoft software listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file are available for free.<br/>
 Okay, that's fine but... what version should you download ? We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> on StackOverflow:
-<pre style="font-size:80%;">
+<pre style="margin:0 0 1em 20px;font-size:80%;">
 GRMSDK_EN_DVD.iso is a version for x86 environment.
 GRMSDKX_EN_DVD.iso is a version for x64 environment.
 GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 </pre>
+</p>
+<p style="margin:0 0 1em 20px;">
 In our case we downloaded the following installation files (see <a href="#section_01">section 1</a>):
-<pre style="font-size:80%;">
+<pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
 graalvm-ce-windows-amd64-19.1.1.zip <i>(179 MB)</i>
 GRMSDKX_EN_DVD.iso                  <i>(570 MB)</i>
 VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
 </pre>
-</div>
-<p/>
+</p>
+
 <a name="footnote_03">[3]</a> [↩](#anchor_03)
 
-<div style="margin:0 0 1em 20px;">
+<p style="margin:0 0 1em 20px;">
 The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks as follows:
-<pre style="font-size:80%;">
+<pre style="margin:0 0 1em 20px;font-size:80%;">
 <b>package</b> com.oracle.truffle.sl.parser;
 &nbsp;
 <b>import</b> java.io.File;
@@ -478,24 +507,9 @@ The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks 
 &nbsp;&nbsp;&nbsp;&nbsp;}
 }
 </pre>
-</div>
+</p>
 
 ***
-
-<!-- ###################### COMMENT (BEGIN) ##########################
-
-## Links
-
-1) xxxxxxxx
-   http://cesquivias.github.io/blog/2014/10/13/writing-a-language-in-truffle-part-1-a-simple-slow-interpreter/
-
-2) Java with ANTLR
-   https://www.baeldung.com/java-antlr
-
-3) Faire connaissance avec Graal
-   https://www.infoq.com/fr/articles/Graal-Java-JIT-Compiler/
-
-###################### COMMENT (END) ########################## -->
 
 *[mics](http://lampwww.epfl.ch/~michelou/)/August 2019* [**&#9650;**](#top)
 <span id="bottom">&nbsp;</span>
