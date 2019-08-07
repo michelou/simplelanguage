@@ -16,7 +16,7 @@
 
 Let us start with the (supposed) simple path to run the SL parser:
 
-- open a console with the *Windows SDK 7.1 Command Prompt* shortcut
+- open a console with the *"Windows SDK 7.1 Command Prompt"* shortcut
 - ensure environment variables `JAVA_HOME` and `PATH` are correctly setup
 - generate the SL parser with command **`mvn package`**
 - run the SL parser, eg. **`sl.bat languages\tests\Add.sl`**
@@ -76,7 +76,7 @@ where
 - directory [**`component\`**](component/) contains two additional batch files.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
 - directory [**`native\`**](native/) contains two additiona batch files.
-- file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** *outside* of the *Windows SDK 7.1 Command Prompt*.
+- file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** inside or *outside* of the *Windows SDK 7.1 Command Prompt*.
 - file [**`generate_parser.bat`**](generate_parser.bat) is the batch script for generating the SL parser source files.
 - file [**`setenv.bat`**](setenv.bat) is the batch script for setting up our environment.
 - file [**`sl.bat`**](sl.bat) is the batch script for executing the generated SL parser.
@@ -127,7 +127,7 @@ We distinguish different sets of batch commands:
         parser      generate ANTLR parser for SL
     </pre>
 
-3. [**`generate_parser.bat`**](generate_parser.bat) - This batch command generates the ANTLR parser from the grammar file [**`SimpleLanguage.g4`**](./language/src/main/java/com/oracle/truffle/sl/parser/SimpleLanguage.g4).
+3. [**`generate_parser.bat`**](generate_parser.bat) - This batch command generates the ANTLR parser from the grammar file [**`SimpleLanguage.g4`**](./language/src/main/java/com/oracle/truffle/sl/parser/SimpleLanguage.g4). Unlike the corresponding shell script [**`generate_parser`**](generate_parser), it also provides subcommand **`test`** to run a single test of the generated code (same as in file [**`.travis.yml`**](.travis.yml)).
 
     <pre style="font-size:80%;">
     <b>&gt; generate_parser help</b>
@@ -365,7 +365,7 @@ Command [**`generate_parser test`**](generate_parser.bat) creates a test class *
 
 Output directory **`target\parser\`** now contains three additional elements:<br/>
 - the [argument file](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#commandlineargfile) **`source_list.txt`**<br/>
-- the source file **`src\SimpleLanguageMainTest.java`** (generated)<br/>
+- the (generated) source file **`src\SimpleLanguageMainTest.java`**<br/>
 - the subdirectory **`classes\**\*.class`**:
 
 <pre style="font-size:80%;">
@@ -478,7 +478,7 @@ GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 In our case we downloaded the following installation files (see <a href="#section_01">section 1</a>):
 <pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
-graalvm-ce-windows-amd64-19.1.1.zip <i>(179 MB)</i>
+<a href="https://github.com/oracle/graal/releases/tag/vm-19.1.1">graalvm-ce-windows-amd64-19.1.1.zip</a> <i>(179 MB)</i>
 GRMSDKX_EN_DVD.iso                  <i>(570 MB)</i>
 VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
 </pre>
