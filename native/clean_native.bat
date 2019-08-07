@@ -1,8 +1,5 @@
 @echo off
 
-rem only for interactive debugging
-set _DEBUG=0
-
 rem ##########################################################################
 rem ## Environment setup
 
@@ -27,5 +24,4 @@ rem ##########################################################################
 rem ## Cleanups
 
 :end
-if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
 exit /b %_EXITCODE%

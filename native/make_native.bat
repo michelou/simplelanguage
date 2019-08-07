@@ -1,9 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem only for interactive debugging
-set _DEBUG=0
-
 rem ##########################################################################
 rem ## Environment setup
 
@@ -40,7 +37,6 @@ set _CPATH=%_LANGUAGE_DIR%\target\simplelanguage.jar;%_LAUNCHER_DIR%\target\laun
 if exist "%_TARGET_DIR%\" rmdir /s /q "%_TARGET_DIR%"
 mkdir "%_TARGET_DIR%"
 
-if %_DEBUG%==1 echo [%_BASENAME%] %_NATIVE_CMD% %_NATIVE_OPTS% -cp %_CPATH% com.oracle.truffle.sl.launcher.SLMain "%_TARGET_DIR%\slnative"
 rem native-image tool generates files %_TARGET_DIR%\slnative.{exe,exp,lib,obj,pdb,tmp}
 call %_NATIVE_CMD% %_NATIVE_OPTS% -cp %_CPATH% com.oracle.truffle.sl.launcher.SLMain "%_TARGET_DIR%\slnative"
 if not %ERRORLEVEL%==0 (
@@ -53,6 +49,5 @@ rem ##########################################################################
 rem ## Cleanups
 
 :end
-if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
 exit /b %_EXITCODE%
 endlocal

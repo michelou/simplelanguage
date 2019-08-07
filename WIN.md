@@ -6,10 +6,23 @@
     <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png" alt="GraalVM"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
-    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the Java application.
+    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the SL parser.
   </td>
   </tr>
 </table>
+
+
+## <span id="section_00">Preamble</span>
+
+Let us start with the (supposed) simple path to run the SL parser:
+
+- open a console with the *Windows SDK 7.1 Command Prompt* shortcut
+- ensure environment variables `JAVA_HOME` and `PATH` are correctly setup
+- generate the SL parser with command **`mvn package`**
+- run the SL parser, eg. **`sl.bat languages\tests\Add.sl`**
+
+Unfortunately the above scenario will fail unless we provide the missing infrastrucutre (eg. command **`sl.bat`**). 
+
 
 ## <span id="section_01">Project dependencies</span>
 
@@ -63,7 +76,7 @@ where
 - directory [**`component\`**](component/) contains two additional batch files.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
 - directory [**`native\`**](native/) contains two additiona batch files.
-- file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** and others tasks.
+- file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** *outside* of the *Windows SDK 7.1 Command Prompt*.
 - file [**`generate_parser.bat`**](generate_parser.bat) is the batch script for generating the SL parser source files.
 - file [**`setenv.bat`**](setenv.bat) is the batch script for setting up our environment.
 - file [**`sl.bat`**](sl.bat) is the batch script for executing the generated SL parser.
@@ -95,7 +108,10 @@ We distinguish different sets of batch commands:
         help        display this help message
     </pre>
 
-2. [**`build.bat`**](build.bat) - This batch command is the most useful script in this project; it provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the [ANTLR](https://www.antlr.org/i) parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
+2. [**`build.bat`**](build.bat) - This batch command provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the [ANTLR](https://www.antlr.org/i) parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
+    > **:mag_right:** Command [**`build.bat`**](build.bat) differs in two ways from command **`mvn package`**:<br/>
+    > - it can also be executed *outside* of the *Windows SDK 7.1 Command Prompt*.<br/>
+    > - it generates a distribution-ready output (see section [**Usage examples**](#section_04)).
 
     <pre style="font-size:80%;">
     <b>&gt; build help</b>

@@ -1,9 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem only for interactive debugging
-set _DEBUG=0
-
 rem ##########################################################################
 rem ## Environment setup
 
@@ -52,8 +49,10 @@ if not %_EXITCODE%==0 goto end
 
 call :mkdir "%_LANGUAGE_PATH%"
 if not %_EXITCODE%==0 goto end
+
 copy /y "%_LANGUAGE_DIR%\target\simplelanguage.jar" "%_LANGUAGE_PATH%\" 1>NUL
 if not %ERRORLEVEL%==0 (
+    echo Error: Missing file simplelanguage.jar 1>&2
     set _EXITCODE=1
     goto end
 )
@@ -61,6 +60,7 @@ call :mkdir "%_LANGUAGE_PATH%\launcher"
 if not %_EXITCODE%==0 goto end
 copy /y "%_LAUNCHER_DIR%\target\sl-launcher.jar" "%_LANGUAGE_PATH%\launcher\" 1>NUL
 if not %ERRORLEVEL%==0 (
+    echo Error: Missing file sl-launcher.jar 1>&2
     set _EXITCODE=1
     goto end
 )
@@ -68,12 +68,14 @@ call :mkdir "%_LANGUAGE_PATH%\bin"
 if not %_EXITCODE%==0 goto end
 copy /y "%_ROOT_DIR%sl.bat" "%_LANGUAGE_PATH%\bin\" 1>NUL
 if not %ERRORLEVEL%==0 (
+    echo Error: Missing file sl.bat 1>&2
     set _EXITCODE=1
     goto end
 )
 if defined _INCLUDE_SLNATIVE (
     copy /y "%_NATIVE_DIR%\slnative.exe" "%_LANGUAGE_PATH%\bin\" 1>NUL
     if not !ERRORLEVEL!==0 (
+        echo Error: Missing file slnative.exe 1>&2
         set _EXITCODE=1
         goto end
     )
@@ -85,6 +87,7 @@ if not %_EXITCODE%==0 goto end
 rem touch (empty) file
 copy /y nul "%_LANGUAGE_PATH%\native-image.properties" 1>NUL
 if not %ERRORLEVEL%==0 (
+    echo Error: Failed to create file native-image.properties 1>&2
     set _EXITCODE=1
     goto end
 )
@@ -100,12 +103,17 @@ if not %_EXITCODE%==0 goto end
 
 pushd "%_TEMP_DIR%"
 call %_JAR_CMD% cfm %_TARGET_DIR%\sl-component.jar %_META_INF_DIR%\MANIFEST.MF .
+if not %ERRORLEVEL%==0 (
+    popd
+    set _EXITCODE=1
+    goto end
+)
 popd
 
 call :rmdir "%_TEMP_DIR%"
 if not %_EXITCODE%==0 goto end
 
-goto :end
+goto end
 
 rem ##########################################################################
 rem ## Subroutines
@@ -136,5 +144,5 @@ rem ##########################################################################
 rem ## Cleanups
 
 :end
-if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
 exit /b %_EXITCODE%
+endlocal

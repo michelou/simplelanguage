@@ -136,54 +136,48 @@ if not %ERRORLEVEL%==0 (
 goto :eof
 
 :dist
+setlocal
+call :dist_env
+
 if %_DEBUG%==1 ( set __MVN_OPTS=%_MVN_OPTS%
 ) else if %_VERBOSE%==1 ( set __MVN_OPTS=%_MVN_OPTS%
 ) else ( set __MVN_OPTS=--quiet %_MVN_OPTS%
 )
-
-call :dist_setenv
 if %_DEBUG%==1 echo [%_BASENAME%] call %_MVN_CMD% %__MVN_OPTS% package
 call %_MVN_CMD% %__MVN_OPTS% package
 if not %ERRORLEVEL%==0 (
-    call :dist_unsetenv
     echo Error: Execution of maven package failed 1>&2
     set _EXITCODE=1
-    goto :eof
+    goto dist_done
 )
-call :dist_unsetenv
-
 set __LANGUAGE_JAR_FILE=
 for %%f in (%_LANGUAGE_DIR%\target\*language*SNAPSHOT.jar) do set __LANGUAGE_JAR_FILE=%%~f
 call :dist_copy "%__LANGUAGE_JAR_FILE%" "%_TARGET_LIB_DIR%\"
+if not %_EXITCODE%==0 goto dist_done
 
 set __LAUNCHER_JAR_FILE=
 for %%f in (%_LAUNCHER_TARGET_DIR%\launcher*SNAPSHOT.jar) do set __LAUNCHER_JAR_FILE=%%~f
 call :dist_copy "%__LAUNCHER_JAR_FILE%" "%_TARGET_LIB_DIR%\"
+if not %_EXITCODE%==0 goto dist_done
 
 set __ANTLR4_JAR_FILE=
 for /f "delims=" %%f in ('where /r "%USERPROFILE%\.m2\repository\org\antlr" *.jar') do set __ANTLR4_JAR_FILE=%%~f
 call :dist_copy "%__ANTLR4_JAR_FILE%" "%_TARGET_LIB_DIR%\"
+if not %_EXITCODE%==0 goto dist_done
 
 call :dist_copy "%_LAUNCHER_SCRIPTS_DIR%\sl.bat" "%_TARGET_BIN_DIR%\"
+if not %_EXITCODE%==0 goto dist_done
 
 if %_NATIVE%==1 (
     call :dist_copy "%_NATIVE_TARGET_DIR%\slnative.exe" "%_TARGET_BIN_DIR%\"
+    if not !_EXITCODE!==0 goto dist_done
 )
+:dist_done
+endlocal
 goto :eof
 
-:dist_setenv
-if defined sdkdir goto dist_setenv_done
-
-set __INCLUDE=
-if defined INCLUDE set __INCLUDE=%INCLUDE%
-set __LIB=
-if defined LIB set __LIB=%LIB%
-set __LIBPATH=
-if defined LIBPATH set __LIBPATH=%LIBPATH%
-set __PATH=
-if defined PATH set __PATH=%PATH%
-set __SL_BUILD_NATIVE=
-if defined SL_BUILD_NATIVE set __SL_BUILD_NATIVE=%SL_BUILD_NATIVE%
+:dist_env
+if defined sdkdir goto dist_env_done
 
 set __MSVC_ARCH=
 set __NET_ARCH=Framework\v4.0.30319
@@ -198,30 +192,18 @@ set INCLUDE=%MSVC_HOME%\INCLUDE;%SDK_HOME%\INCLUDE;%SDK_HOME%\INCLUDE\gl
 set LIB=%MSVC_HOME%\Lib%__MSVC_ARCH%;%SDK_HOME%\lib%__SDK_ARCH%
 set LIBPATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVC_HOME%\lib%__MSVC_ARCH%
 set PATH=c:\WINDOWS\Microsoft.NET\%__NET_ARCH%;%MSVS_HOME%\Common7\IDE;%MSVS_HOME%\Common7\Tools;%MSVC_HOME%\Bin%__MSVC_ARCH%;%SDK_HOME%\Bin%__SDK_ARCH%;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;%MAVEN_HOME%\bin
-:dist_setenv_done
+:dist_env_done
 if %_NATIVE%==1 ( set SL_BUILD_NATIVE=true
 ) else ( set SL_BUILD_NATIVE=false
 )
 if %_DEBUG%==1 (
-    echo [%_BASENAME%] -------------------------------------------------------
-    echo [%_BASENAME%]  E N V I R O N M E N T   V A R I A B L E S
-    echo [%_BASENAME%] -------------------------------------------------------
+    echo [%_BASENAME%] ===== B U I L D   V A R I A B L E S =====
     echo [%_BASENAME%] INCLUDE="%INCLUDE%"
     echo [%_BASENAME%] LIB="%LIB%"
     echo [%_BASENAME%] LIBPATH="%LIBPATH%"
     echo [%_BASENAME%] SL_BUILD_NATIVE=%SL_BUILD_NATIVE%
+    echo [%_BASENAME%] =========================================
 )
-goto :eof
-
-:dist_unsetenv
-if defined sdkdir goto dist_unsetenv_done
-
-if defined __INCLUDE set INCLUDE=%__INCLUDE%
-if defined __LIB set LIB=%__LIB%
-if defined __LIBPATH set LIBPATH=%__LIBPATH%
-if defined __PATH set PATH=%__PATH%
-:dist_unsetenv_done
-if defined __SL_BUILD_NATIVE set SL_BUILD_NATIVE=%__SL_BUILD_NATIVE%
 goto :eof
 
 :dist_copy
