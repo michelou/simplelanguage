@@ -21,7 +21,7 @@ Let us start with the (supposed) simple path to run the SL parser:
 - generate the SL parser with command **`mvn package`**
 - run the SL parser, eg. **`sl.bat languages\tests\Add.sl`**
 
-Unfortunately the above scenario will fail unless we provide the missing infrastrucutre (eg. command **`sl.bat`**). 
+Unfortunately the above scenario will fail unless we complete the current infrastructure (eg. command **`sl.bat`**). 
 
 
 ## <span id="section_01">Project dependencies</span>
@@ -108,7 +108,7 @@ We distinguish different sets of batch commands:
         help        display this help message
     </pre>
 
-2. [**`build.bat`**](build.bat) - This batch command provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the [ANTLR](https://www.antlr.org/i) parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
+2. [**`build.bat`**](build.bat) - This batch command provides subcommands such as **`clean`** to delete the generated files (**`target`** directories), **`dist`** to generate the binary distributions (JVM and native versions) and **`parser`** to generate the [ANTLR](https://www.antlr.org/) parser to SL (call to [**`generate_parser.bat`**](generated_parser.bat)).
     > **:mag_right:** Command [**`build.bat`**](build.bat) differs in two ways from command **`mvn package`**:<br/>
     > - it can also be executed *outside* of the *Windows SDK 7.1 Command Prompt*.<br/>
     > - it generates a distribution-ready output (see section [**Usage examples**](#section_04)).
@@ -127,7 +127,7 @@ We distinguish different sets of batch commands:
         parser      generate ANTLR parser for SL
     </pre>
 
-3. [**`generate_parser.bat`**](generate_parser.bat) - This batch command generates the ANTLR parser from the grammar file [**`SimpleLanguage.g4`**](./language/src/main/java/com/oracle/truffle/sl/parser/SimpleLanguage.g4). Unlike the corresponding shell script [**`generate_parser`**](generate_parser), it also provides subcommand **`test`** to run a single test of the generated code (same as in file [**`.travis.yml`**](.travis.yml)).
+3. [**`generate_parser.bat`**](generate_parser.bat) - This batch command generates the [ANTLR](https://www.antlr.org/) parser from the grammar file [**`SimpleLanguage.g4`**](./language/src/main/java/com/oracle/truffle/sl/parser/SimpleLanguage.g4). Compared to the corresponding shell script [**`generate_parser`**](generate_parser), it also provides subcommand **`clean`** and subcommand **`test`** to run a single test (same as in file [**`.travis.yml`**](.travis.yml)).
 
     <pre style="font-size:80%;">
     <b>&gt; generate_parser help</b>
@@ -136,6 +136,7 @@ We distinguish different sets of batch commands:
         -debug      display commands executed by this script
         -verbose    display progress messages
       Subcommands:
+        clean       delete generated files
         help        display this help message
         test        perform test with generated ANTLR parser
     </pre>
@@ -365,7 +366,6 @@ Command [**`generate_parser test`**](generate_parser.bat) creates a test class *
 
 Output directory **`target\parser\`** now contains three additional elements:<br/>
 - the [argument file](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#commandlineargfile) **`source_list.txt`**<br/>
-- the (generated) source file **`src\SimpleLanguageMainTest.java`**<br/>
 - the subdirectory **`classes\**\*.class`**:
 
 <pre style="font-size:80%;">
@@ -395,7 +395,6 @@ S:\TARGET
             SimpleLanguageLexer.interp
             SimpleLanguageLexer.java
             SimpleLanguageLexer.tokens
-            SimpleLanguageMainTest.java
             SimpleLanguageParser.java
 </pre>
 
@@ -404,10 +403,8 @@ Adding option **`-verbose`** to the above command (i.e. [**`generate_parser -ver
 <pre style="font-size:80%;">
 <b>&gt; generate_parser -verbose test</b>
 Generate ANTLR parser files into directory S:\target\parser\src
-Generate test class SimpleLanguageMainTest.java into directory S:\target\parser\src
 Compile Java source files to directory S:\target\parser\classes
 Execute test with SimpleLangage example tests\Add.sl
-SimpleLanguage Example
 == running on org.graalvm.polyglot.Engine@e580929
 7
 34
@@ -418,8 +415,6 @@ SimpleLanguage Example
 7000000000000
 </pre>
 
-> **:mag_right:** Source file **`SimpleLanguageMainTest.java`** <sup id="anchor_03">[[3]](#footnote_03)</sup> is a minimized version of [**`SLMain.java`**](https://github.com/graalvm/simplelanguage/blob/master/launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) available from the [**`graalvm/simplelanguage`**](https://github.com/graalvm/simplelanguage) project.
-
 Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`generate_parser -debug test`**](generate_parser.bat)) displays the internally executed commands:
 
 <pre style="font-size:80%;">
@@ -428,7 +423,6 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 [generate_parser] java.exe -cp S:\target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener S:\language\src\main\java\com\oracle\truffle\sl\parser\SimpleLanguage.g4 -o S:\target\parser\src
 [generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
 [generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SimpleLanguageMainTest "S:\language\tests\Add.sl"
-SimpleLanguage Example
 == running on org.graalvm.polyglot.Engine@56cbfb61
 7
 34
@@ -467,7 +461,7 @@ SimpleLanguage Example
 
 <p style="margin:0 0 1em 20px;">
 The two Microsoft software listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file are available for free.<br/>
-Okay, that's fine but... what version should you download ? We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> on StackOverflow:
+Okay, that's fine but... what version should we download ? We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> (April 2014 !) on StackOverflow:
 <pre style="margin:0 0 1em 20px;font-size:80%;">
 GRMSDK_EN_DVD.iso is a version for x86 environment.
 GRMSDKX_EN_DVD.iso is a version for x64 environment.
@@ -479,49 +473,8 @@ In our case we downloaded the following installation files (see <a href="#sectio
 <pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
 <a href="https://github.com/oracle/graal/releases/tag/vm-19.1.1">graalvm-ce-windows-amd64-19.1.1.zip</a> <i>(179 MB)</i>
-GRMSDKX_EN_DVD.iso                  <i>(570 MB)</i>
+<a href="https://www.microsoft.com/en-us/download/details.aspx?id=8442">GRMSDKX_EN_DVD.iso</a>                  <i>(570 MB)</i>
 VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
-</pre>
-</p>
-
-<a name="footnote_03">[3]</a> [↩](#anchor_03)
-
-<p style="margin:0 0 1em 20px;">
-The generated source file <b><code>SimpleLanguageMainTest.java</code></b> looks as follows:
-<pre style="margin:0 0 1em 20px;font-size:80%;">
-<b>package</b> com.oracle.truffle.sl.parser;
-&nbsp;
-<b>import</b> java.io.File;
-<b>import</b> java.util.HashMap;
-<b>import</b> java.util.Map;
-&nbsp;
-<b>import</b> org.graalvm.polyglot.Context;
-<b>import</b> org.graalvm.polyglot.Source;
-<b>import</b> org.graalvm.polyglot.Value;
-&nbsp;
-<b>public final class</b> SimpleLanguageMainTest {
-&nbsp;&nbsp;&nbsp;&nbsp;<b>private static final</b> String SL = "sl";
-&nbsp;
-&nbsp;&nbsp;&nbsp;&nbsp;<b>public static void</b> main(String[] args) <b>throws</b> Exception {
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Map<String, String> options = <b>new</b> HashMap<>();
-&nbsp;
-        System.out.println("SimpleLanguage Example");
-        Source source = Source.newBuilder(SL, <b>new</b> File(args[0])).build();
-        Context context = Context.newBuilder(SL).in(System.in).out(System.out).options(options).build();
-        System.out.println("== running on " + context.getEngine());
-        Value result = context.eval(source);
-        <b>if</b> (context.getBindings(SL).getMember("main") == <b>null</b>) {
-            context.close();
-            System.err.println("No function main(^) defined in SL source file.");
-            System.exit(1);
-        }
-        <b>if</b> (!result.isNull()) {
-            System.out.println(result.toString());
-        }
-        context.close();
-        System.exit(0);
-&nbsp;&nbsp;&nbsp;&nbsp;}
-}
 </pre>
 </p>
 
