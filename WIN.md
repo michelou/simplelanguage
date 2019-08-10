@@ -365,7 +365,7 @@ S:\TARGET
             SimpleLanguageParser.java
 </pre>
 
-Command [**`generate_parser test`**](generate_parser.bat) creates a test class **`SimpleLanguageMainTest.java`** and compiles/executes it together with the lexer/parser files from directory **`target\parser\src\`**. 
+Command [**`generate_parser test`**](generate_parser.bat) compiles the lexer/parser files from directory **`target\parser\src\`** with source files from [**`language\src\`**](language/src/) and executes the SL main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java). 
 
 Output directory **`target\parser\`** now contains three additional elements:<br/>
 - the [argument file](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#commandlineargfile) **`source_list.txt`**<br/>
@@ -425,7 +425,7 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 [generate_parser] _DEBUG=1 _TEST=1 _VERBOSE=0
 [generate_parser] java.exe -cp S:\target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener S:\language\src\main\java\com\oracle\truffle\sl\parser\SimpleLanguage.g4 -o S:\target\parser\src
 [generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
-[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SimpleLanguageMainTest "S:\language\tests\Add.sl"
+[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SLMain "S:\language\tests\Add.sl"
 == running on org.graalvm.polyglot.Engine@56cbfb61
 7
 34
