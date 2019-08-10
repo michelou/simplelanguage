@@ -76,7 +76,7 @@ WIN.md
 where
 
 - directory [**`component\`**](component/) contains two additional batch files.
-- file [**`docs\ebnf\SimpleLanguage.md`**](docs/ebnf/SimpleLanguage.md) <sup id="anchor_03">[[3]](#footnote_03)</sup>presents the EBNF grammar of the SL language as PNG images.
+- file [**`docs\ebnf\SimpleLanguage.md`**](docs/ebnf/SimpleLanguage.md)<sup id="anchor_03">[[3]](#footnote_03)</sup> presents the EBNF grammar of the SL language as PNG images.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
 - directory [**`native\`**](native/) contains two additiona batch files.
 - file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** inside or *outside* of the *Windows SDK 7.1 Command Prompt*.
