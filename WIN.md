@@ -14,14 +14,14 @@
 
 ## <span id="section_00">Preamble</span>
 
-Let us start with the (supposed) simple path to run the SL parser:
+Let us start with the short path to run the SL parser:
 
 - open a console with the *"Windows SDK 7.1 Command Prompt"* shortcut
 - ensure environment variables `JAVA_HOME` and `PATH` are correctly setup
 - generate the SL parser with command **`mvn package`**
 - run the SL parser, eg. **`sl.bat languages\tests\Add.sl`**
 
-Unfortunately the above scenario will fail unless we complete the current infrastructure (eg. command **`sl.bat`**). 
+Unfortunately the above scenario will fail on a Windows machine unless we complete the current infrastructure (eg. command **`sl.bat`**). 
 
 
 ## <span id="section_01">Project dependencies</span>
@@ -60,6 +60,8 @@ We added/modified the following files from the original [**`SimpleLanguage`**](h
 component\clean_component.bat
 component\make_component.bat
 component\pom.xml                 <i>(modified)</i>
+docs\ebnf\SimpleLanguage.ebnf
+docs\ebnf\SimpleLanguage.md
 launcher\src\main\scripts\sl.bat
 native\clean_native.bat
 native\make_native.bat
@@ -74,6 +76,7 @@ WIN.md
 where
 
 - directory [**`component\`**](component/) contains two additional batch files.
+- file [**`docs\ebnf\SimpleLanguage.md`**](docs/ebnf/SimpleLanguage.md) <sup id="anchor_03">[[3]](#footnote_03)</sup>presents the EBNF grammar of the SL language as PNG images.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
 - directory [**`native\`**](native/) contains two additiona batch files.
 - file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** inside or *outside* of the *Windows SDK 7.1 Command Prompt*.
@@ -469,13 +472,19 @@ GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 </pre>
 </p>
 <p style="margin:0 0 1em 20px;">
-In our case we downloaded the following installation files (see <a href="#section_01">section 1</a>):
+In our case we downloaded the following installation files (see section <a href="#section_01"><b>Project dependencies</b></a>):
 <pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
 <a href="https://github.com/oracle/graal/releases/tag/vm-19.1.1">graalvm-ce-windows-amd64-19.1.1.zip</a> <i>(179 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?id=8442">GRMSDKX_EN_DVD.iso</a>                  <i>(570 MB)</i>
-VC-Compiler-KB2519277.exe           <i>(121 MB)</i>
+<a href="https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422">VC-Compiler-KB2519277.exe</a>           <i>(121 MB)</i>
 </pre>
+</p>
+
+<a name="footnote_03">[3]</a> [↩](#anchor_03)
+
+<p style="margin:0 0 1em 20px;">
+We generated the PNG images presented in file <a href="docs/ebnf/SimpleLanguage.md"><b><code>docs\ebnf\SimpleLanguage.md</code></b></a> from grammar file <a href="docs/ebnf/SimpleLanguage.ebnf"><b><code>docs\ebnf\SimpleLanguage.ebnf</code></b></a> given as input to the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagram Generator</a>.
 </p>
 
 ***
