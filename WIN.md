@@ -19,7 +19,7 @@ Let us start with the short path to run the SL parser:
 - open a console with the *"Windows SDK 7.1 Command Prompt"* shortcut
 - ensure environment variables `JAVA_HOME` and `PATH` are correctly setup
 - generate the SL parser with command **`mvn package`**
-- run the SL parser, eg. **`sl.bat languages\tests\Add.sl`**
+- run the SL parser, eg. **`sl.bat language\tests\Add.sl`**
 
 Unfortunately the above scenario will fail on a Windows machine unless we complete the current infrastructure (eg. command **`sl.bat`**). 
 
