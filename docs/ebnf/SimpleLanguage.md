@@ -34,16 +34,17 @@ SL builtin functions are:
 | :---------- | :-------- |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLDefineFunctionBuiltin.java" title="SLDefineFunctionBuiltin.java"><code>defineFunction(String code)</code></a> | <a href="../../language/tests/DefineFunction.sl" title="DefineFunction.sl"><code>defineFunction("function f(a, b) { return a + b; }");</code></a>
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLEvalBuiltin.java" title="SLEvalBuiltin.java"><code>eval(String id, String code): Object</code></a> | <a href="../../language/tests/Eval.sl" title="Eval.sl"><code>eval("sl", "function foo() { return 14 + 2; }");</code></a> |
-| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLGetSizeBuiltin.java" title="SLGetSizeBuiltin.java"><code>getSize(): Object</code></a> | &nbsp; |
+| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLGetSizeBuiltin.java" title="SLGetSizeBuiltin.java"><code>getSize(Object o): long</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLHasSizeBuiltin.java" title="SLHasSizeBuiltin.java"><code>hasSize(Object o): boolean</code></a> | &nbsp; |
+| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLImportBuiltin.java" title="SLImportBuiltin.java"><code>import</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLIsExecutableBuiltin.java" title="SLIsExecutableBuiltin.java"><code>isExecutable(Object o): boolean</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLIsNullBuiltin.java" title="SLIsNullBuiltin.java"><code>isNull(Object o): boolean</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLNanoTimeBuiltin.java"><code>nanoTime(): long</code></a> | <a href="../../language/tests/Builtins.sl" title="Builtins.sl"><code>nanoTime()</code></a> |
-| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLNewObjectBuiltin.java" title="SLNewObjectBuiltin.java"><code>new(): Object</code></a> | <a href="" title=""><code>obj1 = new();<br/>obj1.x = 42;<br/>println(obj1.x);</code></a> |
-| <a href="../../language/tests/Builtins.sl" title="Builtins.sl"><code>println(long value)<br/>println(boolean value)<br/>println(String value)<br/>println(Object value)</code></a> | <a href="" title="Builtins.sl"><code>println("Hello World!")</code></a> |
+| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLNewObjectBuiltin.java" title="SLNewObjectBuiltin.java"><code>new(): Object</code></a> | <a href="" title=""><code>obj1 = new();</code><br/><code>obj1.x = 42;</code><br/><code>println(obj1.x);</code></a> |
+| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLPrintlnBuiltin.java" title="SLPrintlnBuiltin.java"><code>println(long value)</code><br/><code>println(boolean value)</code><br/><code>println(String value)</code><br/><code>println(Object value)</code></a> | <a href="" title="Builtins.sl"><code>println("Hello World!")</code></a> |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLReadlnBuiltin.java" title="SLReadlnBuiltin.java"><code>readln(): String</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLStackTraceBuiltin.java" title="SLStackTraceBuiltin.java"><code>stacktrace(): String</code></a> | &nbsp; |
-| <a href="" title=""><code>wrapPrimitive</code></a> | &nbsp; |
+| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLWrapPrimitiveBuiltin.java" title="SLWrapPrimitiveBuiltin.java"><code>wrapPrimitive</code></a> | &nbsp; |
 
 ***
 

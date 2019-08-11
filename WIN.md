@@ -440,6 +440,14 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 
 #### `sl.bat`
 
+Command [**`sl`**](sl.bat) accepts the following (optional) parameters:
+
+<pre style="font-size:80%;">
+sl { &lt;option&gt; } [ &lt;file_path&gt; ]
+</pre>
+
+For instance passing [**`language\tests\Add.sl`**](language/tests/Add.sl) as argument generates the following output:
+
 <pre style="font-size:80%;">
 <b>&gt; sl language\tests\Add.sl</b>
 == running on org.graalvm.polyglot.Engine@47d384ee
@@ -450,6 +458,47 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 4000000000003
 3000000000004
 7000000000000
+</pre>
+
+Command [**`sl`**](sl.bat) also accepts options; options starting with **`--<key>=<value>`** are passed to the main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java).
+
+| *Option* (key/value) | *Description* |
+| :------- | :------------ |
+| <code>--engine.Inlining=&lt;value&gt;</code> | Controls inlining.<br/> Values: <code>true</code> or <code>false</code> |
+| <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html"><code>--log.level=&lt;value&gt;</code></a> | Controls the logging output.<br/>Values: <code>SEVERE</code>, <code>WARNING</code>, .., <code>FINEST</code> |
+
+For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.sl) defines the two functions **`main`** and **`fib`** which are listed together with the SL built-in functions when specifying option [**`--log.level=FINE`**](https://docs.oracle.com/javase/8/docs/api/java/util/logging/Level.html).
+
+<pre style="font-size:80%;">
+<b>&gt; sl "--log.level=FINE" language\tests\Fibonacci.sl</b>
+== running on org.graalvm.polyglot.Engine@e580929
+[sl::SLFunction] FINE: Installed call target for: readln
+[sl::SLFunction] FINE: Installed call target for: print
+[sl::SLFunction] FINE: Installed call target for: println
+[sl::SLFunction] FINE: Installed call target for: nanoTime
+[sl::SLFunction] FINE: Installed call target for: defineFunction
+[sl::SLFunction] FINE: Installed call target for: stacktrace
+[sl::SLFunction] FINE: Installed call target for: helloEqualsWorld
+[sl::SLFunction] FINE: Installed call target for: new
+[sl::SLFunction] FINE: Installed call target for: eval
+[sl::SLFunction] FINE: Installed call target for: import
+[sl::SLFunction] FINE: Installed call target for: getSize
+[sl::SLFunction] FINE: Installed call target for: hasSize
+[sl::SLFunction] FINE: Installed call target for: isExecutable
+[sl::SLFunction] FINE: Installed call target for: isNull
+[sl::SLFunction] FINE: Installed call target for: wrapPrimitive
+[sl::SLFunction] FINE: Installed call target for: main
+[sl::SLFunction] FINE: Installed call target for: fib
+1: 1
+2: 1
+3: 2
+4: 3
+5: 5
+6: 8
+7: 13
+8: 21
+9: 34
+10: 55
 </pre>
 
 ## Footnotes
