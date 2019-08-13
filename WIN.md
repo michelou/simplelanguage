@@ -440,11 +440,17 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 
 #### `sl.bat`
 
-Command [**`sl`**](sl.bat) accepts the following (optional) parameters:
+Usage of command [**`sl`**](sl.bat) is:
 
 <pre style="font-size:80%;">
 sl { &lt;option&gt; } [ &lt;file_path&gt; ]
 </pre>
+
+where **`<option>`** takes one of the following forms:
+
+- **`-debug`**, **`-dump`**, **`-disassemble`**
+- **`-J`**[**`<java_option>`**](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html), eg. **`-J-Xmx4M`**, **`-J-XshowSettings:vm`**
+- or **`--<key>=<value>`**, eg. **`--log.level=FINE`** (see below)
 
 For instance passing [**`language\tests\Add.sl`**](language/tests/Add.sl) as argument generates the following output:
 
@@ -460,7 +466,7 @@ For instance passing [**`language\tests\Add.sl`**](language/tests/Add.sl) as arg
 7000000000000
 </pre>
 
-Command [**`sl`**](sl.bat) also accepts options; options starting with **`--<key>=<value>`** are passed to the main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java).
+Command [**`sl`**](sl.bat) also accepts **`--<key>=<value>`** options; those are handled by the main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) and are passed to the Graal [execution engine](https://www.graalvm.org/sdk/javadoc/org/graalvm/polyglot/Engine.html).
 
 | *Option* (key/value) | *Description* |
 | :------- | :------------ |
