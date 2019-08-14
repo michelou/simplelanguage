@@ -27,7 +27,7 @@ The following diagrams have been generated from file [**`SimpleLanguage.ebnf`**]
 <p>&nbsp;</p>
 
 <p>
-SL builtin functions are:
+SL built-in functions are:
 </p>
 
 | *Signature* | *Example* |

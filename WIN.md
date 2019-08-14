@@ -19,7 +19,7 @@ Let us start with the short path to run the SL parser:
 - open a console with the *"Windows SDK 7.1 Command Prompt"* shortcut
 - ensure environment variables `JAVA_HOME` and `PATH` are correctly setup
 - generate the SL parser with command **`mvn package`**
-- run the SL parser, eg. **`sl.bat language\tests\Add.sl`**
+- run the SL parser, eg. **`sl language\tests\Add.sl`**
 
 Unfortunately the above scenario will fail on a Windows machine unless we complete the current infrastructure (eg. command **`sl.bat`**). 
 
@@ -55,6 +55,8 @@ C:\Program Files (x86)\Microsoft Visual Studio 10.0\  <i>(555 MB)</i>
 
 ## Directory structure
 
+The [**`SimpleLanguage`**](/https://github.com/graalvm/simplelanguage) example project is a Maven project with 5 POM files (one main project and four subprojects).
+
 We added/modified the following files from the original [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project:
 <pre style="font-size:80%;">
 component\clean_component.bat
@@ -78,12 +80,12 @@ where
 - directory [**`component\`**](component/) contains two additional batch files.
 - file [**`docs\ebnf\SimpleLanguage.md`**](docs/ebnf/SimpleLanguage.md)<sup id="anchor_03">[[3]](#footnote_03)</sup> presents the EBNF grammar of the SL language as PNG images.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
-- directory [**`native\`**](native/) contains two additiona batch files.
+- directory [**`native\`**](native/) contains two additional batch files.
 - file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** inside or *outside* of the *Windows SDK 7.1 Command Prompt*.
 - file [**`generate_parser.bat`**](generate_parser.bat) is the batch script for generating the SL parser source files.
 - file [**`setenv.bat`**](setenv.bat) is the batch script for setting up our environment.
 - file [**`sl.bat`**](sl.bat) is the batch script for executing the generated SL parser.
-- file [**`WIN.md`**](WIN.md) is the Markdown document of this page.
+- file [**`WIN.md`**](WIN.md) is the [Markdown](https://guides.github.com/features/mastering-markdown/) document of this page.
 
 We also define a virtual drive **`S:`** in our working environment in order to reduce/hide the real path of our project directory (see article ["Windows command prompt limitation"](https://support.microsoft.com/en-gb/help/830473/command-prompt-cmd-exe-command-line-string-limitation) from Microsoft Support).
 
@@ -466,7 +468,7 @@ For instance passing [**`language\tests\Add.sl`**](language/tests/Add.sl) as arg
 7000000000000
 </pre>
 
-Command [**`sl`**](sl.bat) also accepts **`--<key>=<value>`** options; those are handled by the main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) and are passed to the Graal [execution engine](https://www.graalvm.org/sdk/javadoc/org/graalvm/polyglot/Engine.html).
+Command [**`sl`**](sl.bat) also accepts **`--<key>=<value>`** options; those are handled by the main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java) and are passed to the GraalVM [execution engine](https://www.graalvm.org/sdk/javadoc/org/graalvm/polyglot/Engine.html).
 
 | *Option* (key/value) | *Description* |
 | :------- | :------------ |
@@ -509,7 +511,7 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 
 ## Footnotes
 
-<a name="footnote_01">[1]</a> [↩](#anchor_01)
+<a name="footnote_01">[1]</a> ***GraalVM Editions*** [↩](#anchor_01)
 
 <p style="margin:0 0 1em 20px;">
 <a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
@@ -536,7 +538,7 @@ In our case we downloaded the following installation files (see section <a href=
 </pre>
 </p>
 
-<a name="footnote_03">[3]</a> [↩](#anchor_03)
+<a name="footnote_03">[3]</a> ***EBNF Grammar*** [↩](#anchor_03)
 
 <p style="margin:0 0 1em 20px;">
 We generated the PNG images presented in file <a href="docs/ebnf/SimpleLanguage.md"><b><code>docs\ebnf\SimpleLanguage.md</code></b></a> from grammar file <a href="docs/ebnf/SimpleLanguage.ebnf"><b><code>docs\ebnf\SimpleLanguage.ebnf</code></b></a> given as input to the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagram Generator</a>.
