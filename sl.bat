@@ -75,7 +75,7 @@ if defined _GRAALVM_VERSION (
     set _JAVA_ARGS=
 
     for %%i in (%*) do (
-        set _ARG=%%i
+        set "_ARG=%%~i"
         if "!_ARG!"=="-debug" (
             set _JAVA_ARGS=!_JAVA_ARGS! -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y
         ) else if "!_ARG!"=="-dump" (
@@ -103,7 +103,7 @@ if defined _GRAALVM_VERSION (
     set _JAVA_ARGS=
 
     for %%i in (%*) do (
-        set _ARG=%%i
+        set "_ARG=%%~i"
         if "!_ARG!"=="-debug" (
             set _JAVA_ARGS=!_JAVA_ARGS! -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y
         ) else if "!_ARG!"=="-dump" (

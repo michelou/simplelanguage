@@ -30,7 +30,7 @@ rem ##########################################################################
 rem ## Main
 
 for %%i in (%*) do (
-    set _ARG=%%i
+    set "_ARG=%%~i"
     if "!_ARG!"=="-debug" (
         set _JAVA_ARGS=!_JAVA_ARGS! -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y
     ) else if "!_ARG!"=="-dump" (

@@ -442,7 +442,7 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 
 #### `sl.bat`
 
-Usage of command [**`sl`**](sl.bat) is:
+Usage of command [**`sl`**](sl.bat) is described on the GraalVM page [*Introduction to SimpleLanguage*](https://www.graalvm.org/docs/graalvm-as-a-platform/implement-language/); we resume it below:
 
 <pre style="font-size:80%;">
 sl { &lt;option&gt; } [ &lt;file_path&gt; ]
