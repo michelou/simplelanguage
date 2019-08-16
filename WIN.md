@@ -6,7 +6,7 @@
     <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png" alt="GraalVM"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
-    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the SL parser.
+    In the following we describe how to build/run the <b><code><a href=".." alt="SimpleLanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the SL parser.
   </td>
   </tr>
 </table>
@@ -55,7 +55,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 10.0\  <i>(555 MB)</i>
 
 ## Directory structure
 
-The [**`SimpleLanguage`**](/https://github.com/graalvm/simplelanguage) example project is a Maven project with 5 POM files (one main project and four subprojects).
+The [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project is a Maven project with five POM files (one [main](POM.xml) project and four subprojects).
 
 We added/modified the following files from the original [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project:
 <pre style="font-size:80%;">
@@ -308,7 +308,7 @@ S:\TARGET
 >  26853376   24.07.2019      13:09:57  S:\target\sl\bin\slnative.exe
 > </pre>
 
-We can now execute the two versions (JVM and native) of our application:
+We can now execute both versions (JVM and native) of our application:
 
 <pre style="font-size:80%;">
 <b>&gt; target\sl\bin\sl.bat language\tests\Add.sl</b>
@@ -369,7 +369,7 @@ S:\TARGET
 
 Command [**`generate_parser test`**](generate_parser.bat) compiles the lexer/parser files from directory **`target\parser\src\`** with source files from [**`language\src\`**](language/src/) and executes the SL main class [**`SLMain`**](launcher/src/main/java/com/oracle/truffle/sl/launcher/SLMain.java). 
 
-Output directory **`target\parser\`** now contains three additional elements:<br/>
+Output directory **`target\parser\`** now contains two additional elements:<br/>
 - the [argument file](https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html#commandlineargfile) **`source_list.txt`**<br/>
 - the subdirectory **`classes\**\*.class`**:
 
@@ -442,7 +442,7 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 
 #### `sl.bat`
 
-Usage of command [**`sl`**](sl.bat) is described on the GraalVM page [*Introduction to SimpleLanguage*](https://www.graalvm.org/docs/graalvm-as-a-platform/implement-language/); we resume it below:
+Usage of command [**`sl`**](sl.bat) is described on the documentation page ["Introduction to SimpleLanguage"](https://www.graalvm.org/docs/graalvm-as-a-platform/implement-language/) of the [GraalVM](https://www.graalvm.org) website; we resume its usage below:
 
 <pre style="font-size:80%;">
 sl { &lt;option&gt; } [ &lt;file_path&gt; ]
@@ -451,8 +451,8 @@ sl { &lt;option&gt; } [ &lt;file_path&gt; ]
 where **`<option>`** takes one of the following forms:
 
 - **`-debug`**, **`-dump`**, **`-disassemble`**
-- **`-J`**[**`<java_option>`**](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html), eg. **`-J-Xmx4M`**, **`-J-XshowSettings:vm`**
-- or **`--<key>=<value>`**, eg. **`--log.level=FINE`** (see below)
+- **`-J`**[**`<java_option>`**](https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html), eg. **`-J-Xmx4M`**, **`-J-XshowSettings:vm`**,<br/>**`-J-Dgraal.ShowConfiguration=(none|info|verbose)`**
+- or **`--<key>=<value>`**, eg. **`--log.level=FINE`** (see example below)
 
 For instance passing [**`language\tests\Add.sl`**](language/tests/Add.sl) as argument generates the following output:
 
@@ -511,7 +511,7 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 
 ## Footnotes
 
-<a name="footnote_01">[1]</a> ***GraalVM Editions*** [↩](#anchor_01)
+<a name="footnote_01">[1]</a> ***2 GraalVM Editions*** [↩](#anchor_01)
 
 <p style="margin:0 0 1em 20px;">
 <a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
@@ -520,8 +520,7 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 <a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
 
 <p style="margin:0 0 1em 20px;">
-The two Microsoft software listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file are available for free.<br/>
-Okay, that's fine but... what version should we download ? We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> (April 2014 !) on StackOverflow:
+The two Microsoft software are listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file. That's fine but... what version should we download ?! We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> (April 2014 !) on [StackOverflow](https://stackoverflow.com/):
 <pre style="margin:0 0 1em 20px;font-size:80%;">
 GRMSDK_EN_DVD.iso is a version for x86 environment.
 GRMSDKX_EN_DVD.iso is a version for x64 environment.
@@ -541,7 +540,7 @@ In our case we downloaded the following installation files (see section <a href=
 <a name="footnote_03">[3]</a> ***EBNF Grammar*** [↩](#anchor_03)
 
 <p style="margin:0 0 1em 20px;">
-We generated the PNG images presented in file <a href="docs/ebnf/SimpleLanguage.md"><b><code>docs\ebnf\SimpleLanguage.md</code></b></a> from grammar file <a href="docs/ebnf/SimpleLanguage.ebnf"><b><code>docs\ebnf\SimpleLanguage.ebnf</code></b></a> given as input to the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagram Generator</a>.
+We used the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagram Generator</a> to generate the PNG images presented in file <a href="docs/ebnf/SimpleLanguage.md"><b><code>docs\ebnf\SimpleLanguage.md</code></b></a> (based on the grammar file <a href="docs/ebnf/SimpleLanguage.ebnf"><b><code>docs\ebnf\SimpleLanguage.ebnf</code></b></a>).
 </p>
 
 ***
