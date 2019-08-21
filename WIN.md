@@ -6,7 +6,7 @@
     <a href="https://www.graalvm.org/"><img style="border:0;" src="https://www.graalvm.org/resources/img/graalvm.png" alt="GraalVM"/></a>
   </td>
   <td style="border:0;padding:0;vertical-align:text-top;">
-    In the following we describe how to build/run the <b><code><a href=".." alt="SimpleLanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the SL parser.
+    In the following we describe how to build/run the <b><code><a href="https://github.com/graalvm/simplelanguage" alt="SimpleLanguage">SimpleLanguage</a></code></b> (aka SL) example project on a Windows machine.<br/>In particular we show how to generate both the JVM version and the native version of the SL parser.
   </td>
   </tr>
 </table>
@@ -29,13 +29,13 @@ Unfortunately the above scenario will fail on a Windows machine unless we comple
 This project depends on several external software for the **Microsoft Windows** platform:
 
 - [Apache Maven 3.6](http://maven.apache.org/download.cgi) ([requires Java 7](http://maven.apache.org/docs/history.html))  ([*release notes*](http://maven.apache.org/docs/3.6.1/release-notes.html))
-- [GraalVM Community Edition 19.1](https://github.com/oracle/graal/releases) <sup id="anchor_01">[[1]](#footnote_01)</sup> ([*release notes*](https://www.graalvm.org/docs/release-notes/#1911))
+- [GraalVM Community Edition 19.2](https://github.com/oracle/graal/releases) <sup id="anchor_01">[[1]](#footnote_01)</sup> ([*release notes*](https://www.graalvm.org/docs/release-notes/19_2/))
 - [Microsoft Windows SDK for Windows 7 and .NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=8442) <sup id="anchor_02a">[[2]](#footnote_02)</sup>
 - [Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422) <sup id="anchor_02b">[[2]](#footnote_02)</sup>
 
 Optionally one may also install the following software:
 
-- [Git 2.22](https://git-scm.com/download/win) ([*release notes*](https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.22.0.txt))
+- [Git 2.23](https://git-scm.com/download/win) ([*release notes*](https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.23.0.txt))
 
 > **:mag_right:** Git for Windows provides a BASH emulation used to run [**`git`**](https://git-scm.com/docs/git) from the command line (as well as over 250 Unix commands like [**`awk`**](https://www.linux.org/docs/man1/awk.html), [**`diff`**](https://www.linux.org/docs/man1/diff.html), [**`file`**](https://www.linux.org/docs/man1/file.html), [**`grep`**](https://www.linux.org/docs/man1/grep.html), [**`more`**](https://www.linux.org/docs/man1/more.html), [**`mv`**](https://www.linux.org/docs/man1/mv.html), [**`rmdir`**](https://www.linux.org/docs/man1/rmdir.html), [**`sed`**](https://www.linux.org/docs/man1/sed.html) and [**`wc`**](https://www.linux.org/docs/man1/wc.html)).
 
@@ -43,8 +43,8 @@ For instance our development environment looks as follows (*August 2019*):
 
 <pre style="font-size:80%;">
 C:\opt\apache-maven-3.6.1\                            <i>( 10 MB)</i>
-C:\opt\graalvm-ce-19.1.1\                             <i>(381 MB)</i>
-C:\opt\Git-2.22.0\                                    <i>(271 MB)</i>
+C:\opt\graalvm-ce-19.2.0\                             <i>(361 MB)</i>
+C:\opt\Git-2.23.0\                                    <i>(271 MB)</i>
 C:\Program Files\Microsoft SDKs\Windows\v7.1\         <i>(333 MB)</i>
 C:\Program Files (x86)\Microsoft Visual Studio 10.0\  <i>(555 MB)</i>
 </pre>
@@ -55,7 +55,7 @@ C:\Program Files (x86)\Microsoft Visual Studio 10.0\  <i>(555 MB)</i>
 
 ## Directory structure
 
-The [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project is a Maven project with five POM files (one [main](POM.xml) project and four subprojects).
+The [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project is a [Maven project](https://maven.apache.org/guides/getting-started/) with five POM files (one [main](pom.xml) project and four subprojects).
 
 We added/modified the following files from the original [**`SimpleLanguage`**](https://github.com/graalvm/simplelanguage) example project:
 <pre style="font-size:80%;">
@@ -164,11 +164,11 @@ Command [**`setenv`**](setenv.bat) is executed once to setup our development env
 <pre style="font-size:80%;">
 <b>&gt; setenv</b>
 Tool versions:
-   javac 1.8.0_222, mvn 3.6.1, git 2.22.0.windows.1, diff 3.7
+   javac 1.8.0_222, mvn 3.6.1, git 2.23.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 
 <b>&gt; where javac mvn</b>
-C:\opt\graalvm-ce-19.1.1\bin\javac.exe
+C:\opt\graalvm-ce-19.2.0\bin\javac.exe
 C:\opt\apache-maven-3.6.1\bin\mvn
 C:\opt\apache-maven-3.6.1\bin\mvn.cmd
 </pre>
@@ -178,13 +178,13 @@ Command [**`setenv -verbose`**](setenv.bat) also displays the tool paths:
 <pre style="font-size:80%;">
 <b>&gt; setenv -verbose</b>
 Tool versions:
-   javac 1.8.0_222, mvn 3.6.1, git 2.22.0.windows.1, diff 3.7
+   javac 1.8.0_222, mvn 3.6.1, git 2.23.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 Tool paths:
-   C:\opt\graalvm-ce-19.1.1\bin\javac.exe
+   C:\opt\graalvm-ce-19.2.0\bin\javac.exe
    C:\opt\apache-maven-3.6.1\bin\mvn.cmd
-   C:\opt\Git-2.22.0\bin\git.exe
-   C:\opt\Git-2.22.0\usr\bin\diff.exe
+   C:\opt\Git-2.23.0\bin\git.exe
+   C:\opt\Git-2.23.0\usr\bin\diff.exe
    C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\cl.exe
    c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\dumpbin.exe
    C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\x64\Uuidgen.Exe
@@ -225,11 +225,11 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO] simplelanguage-graalvm-component                                   [pom]
 [INFO]
 [INFO] ------------------< com.oracle:simplelanguage-parent >------------------
-[INFO] Building simplelanguage-parent 19.1.1-SNAPSHOT                     [1/5]
+[INFO] Building simplelanguage-parent 19.2.0-SNAPSHOT                     [1/5]
 [INFO] --------------------------------[ pom ]---------------------------------
 [...]
 [INFO] --------------< com.oracle:simplelanguage-graalvm-native >--------------
-[INFO] Building simplelanguage-graalvm-native 19.1.1-SNAPSHOT             [4/5]
+[INFO] Building simplelanguage-graalvm-native 19.2.0-SNAPSHOT             [4/5]
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO]
 [INFO] --- exec-maven-plugin:1.6.0:exec (make_native) @ simplelanguage-graalvm-native ---
@@ -252,12 +252,12 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [S:\\native\target\slnative:3432]      [total]:  90,272.90 ms
 [INFO]     
 [INFO] ------------< com.oracle:simplelanguage-graalvm-component >-------------
-[INFO] Building simplelanguage-graalvm-component 19.1.1-SNAPSHOT          [5/5]
+[INFO] Building simplelanguage-graalvm-component 19.2.0-SNAPSHOT          [5/5]
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO]   
 [INFO] --- exec-maven-plugin:1.6.0:exec (make_component) @ simplelanguage-graalvm-component ---
 [INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary for simplelanguage-parent 19.1.1-SNAPSHOT:
+[INFO] Reactor Summary for simplelanguage-parent 19.2.1-SNAPSHOT:
 [INFO]
 [INFO] simplelanguage-parent .............................. SUCCESS [  0.036 s]
 [INFO] simplelanguage ..................................... SUCCESS [ 16.164 s]
@@ -293,16 +293,16 @@ S:\TARGET
     │
     └───lib
             antlr4-runtime-4.7.2.jar
-            launcher-19.1.1-SNAPSHOT.jar
-            simplelanguage-19.1.1-SNAPSHOT.jar
+            launcher-19.2.0-SNAPSHOT.jar
+            simplelanguage-19.2.0-SNAPSHOT.jar
 </pre>
 
 > **:mag_right:** As expected the file sizes for the JVM and native versions are very different:
 > <pre style="font-size:80%;">
 > <b>&gt; where /t /r target\sl\lib *.jar</b>
 >    337904   22.07.2019      18:41:46  S:\target\sl\lib\antlr4-runtime-4.7.2.jar
->      4945   24.07.2019      12:53:37  S:\target\sl\lib\launcher-19.1.1-SNAPSHOT.jar
->    339575   24.07.2019      12:53:37  S:\target\sl\lib\simplelanguage-19.1.1-SNAPSHOT.jar
+>      4945   24.07.2019      12:53:37  S:\target\sl\lib\launcher-19.2.0-SNAPSHOT.jar
+>    339575   24.07.2019      12:53:37  S:\target\sl\lib\simplelanguage-19.2.0-SNAPSHOT.jar
 >
 > <b>&gt; where /t /r target\sl\bin *.exe</b>
 >  26853376   24.07.2019      13:09:57  S:\target\sl\bin\slnative.exe
@@ -426,8 +426,8 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 <b>&gt; generate_parser -debug test</b>
 [generate_parser] _DEBUG=1 _TEST=1 _VERBOSE=0
 [generate_parser] java.exe -cp S:\target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener S:\language\src\main\java\com\oracle\truffle\sl\parser\SimpleLanguage.g4 -o S:\target\parser\src
-[generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
-[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.1.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SLMain "S:\language\tests\Add.sl"
+[generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
+[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SLMain "S:\language\tests\Add.sl"
 == running on org.graalvm.polyglot.Engine@56cbfb61
 7
 34
@@ -511,7 +511,7 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 
 ## Footnotes
 
-<a name="footnote_01">[1]</a> ***2 GraalVM Editions*** [↩](#anchor_01)
+<a name="footnote_01">[1]</a> ***2 GraalVM editions*** [↩](#anchor_01)
 
 <p style="margin:0 0 1em 20px;">
 <a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
@@ -520,7 +520,7 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 <a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
 
 <p style="margin:0 0 1em 20px;">
-The two Microsoft software are listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file. That's fine but... what version should we download ?! We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> (April 2014 !) on [StackOverflow](https://stackoverflow.com/):
+The two Microsoft software are listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file. That's fine but... what version should we download ?! We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> (April 2014 !) on <a href="https://stackoverflow.com/">StackOverflow</a>:
 <pre style="margin:0 0 1em 20px;font-size:80%;">
 GRMSDK_EN_DVD.iso is a version for x86 environment.
 GRMSDKX_EN_DVD.iso is a version for x64 environment.
@@ -531,13 +531,13 @@ GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 In our case we downloaded the following installation files (see section <a href="#section_01"><b>Project dependencies</b></a>):
 <pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
-<a href="https://github.com/oracle/graal/releases/tag/vm-19.1.1">graalvm-ce-windows-amd64-19.1.1.zip</a> <i>(179 MB)</i>
+<a href="https://github.com/oracle/graal/releases/tag/vm-19.2.0">graalvm-ce-windows-amd64-19.2.0.zip</a> <i>(170 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?id=8442">GRMSDKX_EN_DVD.iso</a>                  <i>(570 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422">VC-Compiler-KB2519277.exe</a>           <i>(121 MB)</i>
 </pre>
 </p>
 
-<a name="footnote_03">[3]</a> ***EBNF Grammar*** [↩](#anchor_03)
+<a name="footnote_03">[3]</a> ***EBNF grammar*** [↩](#anchor_03)
 
 <p style="margin:0 0 1em 20px;">
 We used the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagram Generator</a> to generate the PNG images presented in file <a href="docs/ebnf/SimpleLanguage.md"><b><code>docs\ebnf\SimpleLanguage.md</code></b></a> (based on the grammar file <a href="docs/ebnf/SimpleLanguage.ebnf"><b><code>docs\ebnf\SimpleLanguage.ebnf</code></b></a>).
