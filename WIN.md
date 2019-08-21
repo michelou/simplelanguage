@@ -35,6 +35,7 @@ This project depends on several external software for the **Microsoft Windows** 
 
 Optionally one may also install the following software:
 
+- [ANTLR 4.7 tool](https://www.antlr.org/download.html) ([*release notes*](https://github.com/antlr/antlr4/releases/tag/4.7.2)) <sup id="anchor_03">[[3]](#footnote_03)</sup>
 - [Git 2.23](https://git-scm.com/download/win) ([*release notes*](https://raw.githubusercontent.com/git/git/master/Documentation/RelNotes/2.23.0.txt))
 
 > **:mag_right:** Git for Windows provides a BASH emulation used to run [**`git`**](https://git-scm.com/docs/git) from the command line (as well as over 250 Unix commands like [**`awk`**](https://www.linux.org/docs/man1/awk.html), [**`diff`**](https://www.linux.org/docs/man1/diff.html), [**`file`**](https://www.linux.org/docs/man1/file.html), [**`grep`**](https://www.linux.org/docs/man1/grep.html), [**`more`**](https://www.linux.org/docs/man1/more.html), [**`mv`**](https://www.linux.org/docs/man1/mv.html), [**`rmdir`**](https://www.linux.org/docs/man1/rmdir.html), [**`sed`**](https://www.linux.org/docs/man1/sed.html) and [**`wc`**](https://www.linux.org/docs/man1/wc.html)).
@@ -78,7 +79,7 @@ WIN.md
 where
 
 - directory [**`component\`**](component/) contains two additional batch files.
-- file [**`docs\ebnf\SimpleLanguage.md`**](docs/ebnf/SimpleLanguage.md)<sup id="anchor_03">[[3]](#footnote_03)</sup> presents the EBNF grammar of the SL language as PNG images.
+- file [**`docs\ebnf\SimpleLanguage.md`**](docs/ebnf/SimpleLanguage.md)<sup id="anchor_04">[[4]](#footnote_04)</sup> presents the EBNF grammar of the SL language as PNG images.
 - file [**`launcher\src\main\scripts\sl.bat`**](launcher/src/main/scripts/sl.bat) is the batch script to be bundled into the SL distribution.
 - directory [**`native\`**](native/) contains two additional batch files.
 - file [**`build.bat`**](build.bat) is the batch script for running **`mvn package`** inside or *outside* of the *Windows SDK 7.1 Command Prompt*.
@@ -521,23 +522,33 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 
 <p style="margin:0 0 1em 20px;">
 The two Microsoft software are listed in the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md#windows-specifics-1">Windows Specifics</a> section of the <a href="https://github.com/oracle/graal/blob/master/compiler/README.md">oracle/graal README</a> file. That's fine but... what version should we download ?! We found the <a href="https://stackoverflow.com/questions/20115186/what-sdk-version-to-download/22987999#22987999">answer</a> (April 2014 !) on <a href="https://stackoverflow.com/">StackOverflow</a>:
+</p>
 <pre style="margin:0 0 1em 20px;font-size:80%;">
 GRMSDK_EN_DVD.iso is a version for x86 environment.
 GRMSDKX_EN_DVD.iso is a version for x64 environment.
 GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 </pre>
-</p>
 <p style="margin:0 0 1em 20px;">
 In our case we downloaded the following installation files (see section <a href="#section_01"><b>Project dependencies</b></a>):
+</p>
 <pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
 <a href="https://github.com/oracle/graal/releases/tag/vm-19.2.0">graalvm-ce-windows-amd64-19.2.0.zip</a> <i>(170 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?id=8442">GRMSDKX_EN_DVD.iso</a>                  <i>(570 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422">VC-Compiler-KB2519277.exe</a>           <i>(121 MB)</i>
 </pre>
-</p>
 
-<a name="footnote_03">[3]</a> ***EBNF grammar*** [↩](#anchor_03)
+<a name="footnote_03">[3]</a> ***ANTLR distributions*** [↩](#anchor_03)
+
+<p style="margin:0 0 1em 20px;">
+There exists two binary distributions of <a href="https://www.antlr.org/download/">ANTLR 4</a>: ANTLR tool and ANTLR runtime (with bindings to Java, JavaScript, C# and C++). Batch command <a href="generate_parser.bat"</a><b><code>generate_parser</code></b></a> requires ANTLR tool (<i>and</i> will download it if not present in output directory <b><code>target\parser\libs\</code></b>). 
+</p>
+<pre style="margin:0 0 1em 20px; font-size:80%;">
+<b>&gt; java -cp target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool | findstr Version</b>
+ANTLR Parser Generator  Version 4.7.2
+</pre>
+
+<a name="footnote_04">[4]</a> ***EBNF grammar*** [↩](#anchor_04)
 
 <p style="margin:0 0 1em 20px;">
 We used the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagram Generator</a> to generate the PNG images presented in file <a href="docs/ebnf/SimpleLanguage.md"><b><code>docs\ebnf\SimpleLanguage.md</code></b></a> (based on the grammar file <a href="docs/ebnf/SimpleLanguage.ebnf"><b><code>docs\ebnf\SimpleLanguage.ebnf</code></b></a>).
