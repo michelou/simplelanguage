@@ -46,6 +46,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +86,7 @@ public class SLJavaInteropTest {
         Runnable runnable = main.as(Runnable.class);
         runnable.run();
 
-        assertEquals("Called!\n", getOut());
+        assertEquals("Called!\n", toUnixString(os));
     }
 
     private Value lookup(String symbol) {
@@ -102,7 +103,7 @@ public class SLJavaInteropTest {
         PassInValues valuesIn = fn.as(PassInValues.class);
         valuesIn.call("OK", "Fine");
 
-        assertEquals("Called with OK and Fine\n", getOut());
+        assertEquals("Called with OK and Fine\n", toUnixString(os));
     }
 
     private static void assertNumber(double exp, Object real) {
@@ -127,7 +128,7 @@ public class SLJavaInteropTest {
         Value fn = lookup("values");
         PassInArray valuesIn = fn.as(PassInArray.class);
         valuesIn.call(new Object[]{"OK", "Fine"});
-        assertEquals("Called with OKFine and NULL\n", getOut());
+        assertEquals("Called with OKFine and NULL\n", toUnixString(os));
     }
 
     @Test
@@ -140,7 +141,7 @@ public class SLJavaInteropTest {
         PassInVarArg valuesIn = fn.as(PassInVarArg.class);
 
         valuesIn.call("OK", "Fine");
-        assertEquals("Called with OK and Fine\n", getOut());
+        assertEquals("Called with OK and Fine\n", toUnixString(os));
     }
 
     @Test
@@ -153,7 +154,7 @@ public class SLJavaInteropTest {
         PassInArgAndVarArg valuesIn = fn.as(PassInArgAndVarArg.class);
 
         valuesIn.call("OK", "Fine", "Well");
-        assertEquals("Called with OK and FineWell\n", getOut());
+        assertEquals("Called with OK and FineWell\n", toUnixString(os));
     }
 
     @Test
@@ -360,6 +361,17 @@ public class SLJavaInteropTest {
 
         Object c = read.execute(map, "a").as(Object.class);
         assertNumber(33L, c);
+    }
+
+    /**
+     * Converts a {@link ByteArrayOutputStream} content into UTF-8 String with UNIX line ends.
+     */
+    static String toUnixString(ByteArrayOutputStream stream) {
+        try {
+            return stream.toString("UTF-8").replace("\r\n", "\n");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @FunctionalInterface

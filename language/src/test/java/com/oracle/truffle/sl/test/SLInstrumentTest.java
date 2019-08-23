@@ -40,6 +40,7 @@
  */
 package com.oracle.truffle.sl.test;
 
+import static com.oracle.truffle.sl.test.SLJavaInteropTest.toUnixString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -524,7 +525,7 @@ public class SLInstrumentTest {
         Context context = Context.newBuilder().engine(engine).build();
         context.eval(source);
         String engineOutput = fullOutput;
-        assertEquals(engineOutput, getOut(engineOut));
+        assertEquals(engineOutput, toUnixString(engineOut));
 
         // Check output
         Instrument outInstr = engine.getInstruments().get("testEnvironmentHandlerInstrument");
@@ -535,7 +536,7 @@ public class SLInstrumentTest {
         context.eval(source);
         BufferedReader fromOutReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(consumedOut.toByteArray())));
         engineOutput = engineOutput + fullOutput;
-        assertEquals(engineOutput, getOut(engineOut));
+        assertEquals(engineOutput, toUnixString(engineOut));
         assertTrue(fromOutReader.ready());
         assertEquals(fullLines, readLinesList(fromOutReader));
 
@@ -547,7 +548,7 @@ public class SLInstrumentTest {
         fromOutReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(consumedOut.toByteArray())));
         BufferedReader fromOutReader2 = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(consumedOut2.toByteArray())));
         engineOutput = engineOutput + fullOutput;
-        assertEquals(engineOutput, getOut(engineOut));
+        assertEquals(engineOutput, toUnixString(engineOut));
         assertTrue(fromOutReader.ready());
         assertTrue(fromOutReader2.ready());
         String fullLines2x = fullLines.substring(0, fullLines.length() - 1) + ", " + fullLines.substring(1);
@@ -560,7 +561,7 @@ public class SLInstrumentTest {
         consumedOut2.reset();
         context.eval(source);
         engineOutput = engineOutput + fullOutput;
-        assertEquals(engineOutput, getOut(engineOut));
+        assertEquals(engineOutput, toUnixString(engineOut));
         assertEquals(0, consumedOut.size());
         assertTrue(consumedOut2.size() > 0);
         fromOutReader2 = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(consumedOut2.toByteArray())));
@@ -571,7 +572,7 @@ public class SLInstrumentTest {
         outputConsumerBinding2.dispose();
         context.eval(source);
         engineOutput = engineOutput + fullOutput;
-        assertEquals(engineOutput, getOut(engineOut));
+        assertEquals(engineOutput, toUnixString(engineOut));
         assertEquals(0, consumedOut.size());
         assertEquals(0, consumedOut2.size());
 
