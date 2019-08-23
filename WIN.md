@@ -258,7 +258,7 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO]   
 [INFO] --- exec-maven-plugin:1.6.0:exec (make_component) @ simplelanguage-graalvm-component ---
 [INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary for simplelanguage-parent 19.2.1-SNAPSHOT:
+[INFO] Reactor Summary for simplelanguage-parent 19.2.0-SNAPSHOT:
 [INFO]
 [INFO] simplelanguage-parent .............................. SUCCESS [  0.036 s]
 [INFO] simplelanguage ..................................... SUCCESS [ 16.164 s]
@@ -269,7 +269,7 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  01:49 min
-[INFO] Finished at: 2019-07-24T08:14:18+02:00
+[INFO] Finished at: 2019-08-21T10:14:13+07:00
 [INFO] ------------------------------------------------------------------------
 Copy executable S:\native\target\slnative.exe to directory S:\target\sl\bin
 </pre>
