@@ -28,7 +28,7 @@ Unfortunately the above scenario will fail on a Windows machine unless we comple
 
 This project depends on several external software for the **Microsoft Windows** platform:
 
-- [Apache Maven 3.6](http://maven.apache.org/download.cgi) ([requires Java 7](http://maven.apache.org/docs/history.html))  ([*release notes*](http://maven.apache.org/docs/3.6.1/release-notes.html))
+- [Apache Maven 3.6](http://maven.apache.org/download.cgi) ([requires Java 7](http://maven.apache.org/docs/history.html))  ([*release notes*](http://maven.apache.org/docs/3.6.2/release-notes.html))
 - [GraalVM Community Edition 19.2](https://github.com/oracle/graal/releases) <sup id="anchor_01">[[1]](#footnote_01)</sup> ([*release notes*](https://www.graalvm.org/docs/release-notes/19_2/))
 - [Microsoft Windows SDK for Windows 7 and .NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=8442) <sup id="anchor_02a">[[2]](#footnote_02)</sup>
 - [Microsoft Visual C++ 2010 Service Pack 1 Compiler Update for the Windows SDK 7.1](https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422) <sup id="anchor_02b">[[2]](#footnote_02)</sup>
@@ -43,7 +43,7 @@ Optionally one may also install the following software:
 For instance our development environment looks as follows (*August 2019*):
 
 <pre style="font-size:80%;">
-C:\opt\apache-maven-3.6.1\                            <i>( 10 MB)</i>
+C:\opt\apache-maven-3.6.2\                            <i>( 10 MB)</i>
 C:\opt\graalvm-ce-19.2.0\                             <i>(361 MB)</i>
 C:\opt\Git-2.23.0\                                    <i>(271 MB)</i>
 C:\Program Files\Microsoft SDKs\Windows\v7.1\         <i>(333 MB)</i>
@@ -165,13 +165,13 @@ Command [**`setenv`**](setenv.bat) is executed once to setup our development env
 <pre style="font-size:80%;">
 <b>&gt; setenv</b>
 Tool versions:
-   javac 1.8.0_222, mvn 3.6.1, git 2.23.0.windows.1, diff 3.7
+   javac 1.8.0_222, mvn 3.6.2, git 2.23.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 
 <b>&gt; where javac mvn</b>
 C:\opt\graalvm-ce-19.2.0\bin\javac.exe
-C:\opt\apache-maven-3.6.1\bin\mvn
-C:\opt\apache-maven-3.6.1\bin\mvn.cmd
+C:\opt\apache-maven-3.6.2\bin\mvn
+C:\opt\apache-maven-3.6.2\bin\mvn.cmd
 </pre>
 
 Command [**`setenv -verbose`**](setenv.bat) also displays the tool paths:
@@ -179,11 +179,11 @@ Command [**`setenv -verbose`**](setenv.bat) also displays the tool paths:
 <pre style="font-size:80%;">
 <b>&gt; setenv -verbose</b>
 Tool versions:
-   javac 1.8.0_222, mvn 3.6.1, git 2.23.0.windows.1, diff 3.7
+   javac 1.8.0_222, mvn 3.6.2, git 2.23.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 Tool paths:
    C:\opt\graalvm-ce-19.2.0\bin\javac.exe
-   C:\opt\apache-maven-3.6.1\bin\mvn.cmd
+   C:\opt\apache-maven-3.6.2\bin\mvn.cmd
    C:\opt\Git-2.23.0\bin\git.exe
    C:\opt\Git-2.23.0\usr\bin\diff.exe
    C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\amd64\cl.exe
@@ -532,7 +532,7 @@ GRMSDKIAI_EN_DVD.iso is a version for Itanium environment.
 In our case we downloaded the following installation files (see section <a href="#section_01"><b>Project dependencies</b></a>):
 </p>
 <pre style="margin:0 0 1em 20px; font-size:80%;">
-<a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.1-bin.zip</a>          <i>(  8 MB)</i>
+<a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.2-bin.zip</a>          <i>(  8 MB)</i>
 <a href="https://github.com/oracle/graal/releases/tag/vm-19.2.0">graalvm-ce-windows-amd64-19.2.0.zip</a> <i>(170 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?id=8442">GRMSDKX_EN_DVD.iso</a>                  <i>(570 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422">VC-Compiler-KB2519277.exe</a>           <i>(121 MB)</i>

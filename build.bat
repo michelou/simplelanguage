@@ -88,14 +88,14 @@ if /i "%__ARG%"=="help" ( set _HELP=1
 shift
 goto :args_loop
 :args_done
-if %_DEBUG%==1 echo [%_BASENAME%] _CLEAN=%_CLEAN% _DIST=%_DIST% _PARSER=%_PARSER% _NATIVE=%_NATIVE% _VERBOSE=%_VERBOSE%
+if %_DEBUG%==1 echo [%_BASENAME%] _CLEAN=%_CLEAN% _DIST=%_DIST% _PARSER=%_PARSER% _NATIVE=%_NATIVE% _VERBOSE=%_VERBOSE% 1>&2
 goto :eof
 
 :help
 echo Usage: %_BASENAME% { options ^| subcommands }
 echo Options:
 echo   -debug      show commands executed by this script
-echo   -native     generate executable ^(native-image^)
+echo   -native     generate native executable ^(native-image^)
 echo   -verbose    display progress messages
 echo Subcommands:
 echo   clean       delete generated files
@@ -125,8 +125,8 @@ rem input parameter: %1=directory path
 :rmdir
 set __DIR=%~1
 if not exist "!__DIR!\" goto :eof
-if %_DEBUG%==1 ( echo [%_BASENAME%] rmdir /s /q "!__DIR!"
-) else if %_VERBOSE%==1 ( echo Delete directory !__DIR!
+if %_DEBUG%==1 ( echo [%_BASENAME%] rmdir /s /q "!__DIR!" 1>&2
+) else if %_VERBOSE%==1 ( echo Delete directory !__DIR! 1>&2
 )
 rmdir /s /q "!__DIR!"
 if not %ERRORLEVEL%==0 (
@@ -143,7 +143,7 @@ if %_DEBUG%==1 ( set __MVN_OPTS=%_MVN_OPTS%
 ) else if %_VERBOSE%==1 ( set __MVN_OPTS=%_MVN_OPTS%
 ) else ( set __MVN_OPTS=--quiet %_MVN_OPTS%
 )
-if %_DEBUG%==1 echo [%_BASENAME%] call %_MVN_CMD% %__MVN_OPTS% package
+if %_DEBUG%==1 echo [%_BASENAME%] call %_MVN_CMD% %__MVN_OPTS% package 1>&2
 call %_MVN_CMD% %__MVN_OPTS% package
 if not %ERRORLEVEL%==0 (
     echo Error: Execution of maven package failed 1>&2
@@ -197,12 +197,12 @@ if %_NATIVE%==1 ( set SL_BUILD_NATIVE=true
 ) else ( set SL_BUILD_NATIVE=false
 )
 if %_DEBUG%==1 (
-    echo [%_BASENAME%] ===== B U I L D   V A R I A B L E S =====
-    echo [%_BASENAME%] INCLUDE="%INCLUDE%"
-    echo [%_BASENAME%] LIB="%LIB%"
-    echo [%_BASENAME%] LIBPATH="%LIBPATH%"
-    echo [%_BASENAME%] SL_BUILD_NATIVE=%SL_BUILD_NATIVE%
-    echo [%_BASENAME%] =========================================
+    echo [%_BASENAME%] ===== B U I L D   V A R I A B L E S ===== 1>&2
+    echo [%_BASENAME%] INCLUDE="%INCLUDE%" 1>&2
+    echo [%_BASENAME%] LIB="%LIB%" 1>&2
+    echo [%_BASENAME%] LIBPATH="%LIBPATH%" 1>&2
+    echo [%_BASENAME%] SL_BUILD_NATIVE=%SL_BUILD_NATIVE% 1>&2
+    echo [%_BASENAME%] ========================================= 1>&2
 )
 goto :eof
 
@@ -213,7 +213,9 @@ if not "%__DEST_DIR:~-1%"=="\" set __DEST_DIR=%__DEST_DIR%\
 
 if exist "%__SOURCE_FILE%" (
     if not exist "%__DEST_DIR%\" mkdir "%__DEST_DIR%"
-    if %_DEBUG%==1 echo [%_BASENAME%] copy /y "%__SOURCE_FILE%" "%__DEST_DIR%"
+    if %_DEBUG%==1 ( echo [%_BASENAME%] copy /y "%__SOURCE_FILE%" "%__DEST_DIR%" 1>&2
+    ) else if %_VERBOSE%==1 ( echo Copy file to directory !__DEST_DIR:%_ROOT_DIR%=! 1>&2
+    )
     copy /y "%__SOURCE_FILE%" "%__DEST_DIR%" 1>NUL
     if not !ERRORLEVEL!==0 (
         set _EXITCODE=1
@@ -233,8 +235,8 @@ if not exist "%__BATCH_FILE%" (
     set _EXITCODE=1
     goto :eof
 )
-if %_DEBUG%==1 ( echo [%_BASENAME%] call %__BATCH_FILE%
-) else if %_VERBOSE%==1 ( echo Generate ANTLR parser for SL
+if %_DEBUG%==1 ( echo [%_BASENAME%] call %__BATCH_FILE% 1>&2
+) else if %_VERBOSE%==1 ( echo Generate ANTLR parser for SL 1>&2
 )
 call "%__BATCH_FILE%"
 if not %ERRORLEVEL%==0 (
@@ -247,6 +249,6 @@ rem ##########################################################################
 rem ## Cleanups
 
 :end
-if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
+if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE% 1>&2
 exit /b %_EXITCODE%
 endlocal

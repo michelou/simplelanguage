@@ -36,7 +36,7 @@ SL built-in functions are:
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLEvalBuiltin.java" title="SLEvalBuiltin.java"><code>eval(String id, String code): Object</code></a> | <a href="../../language/tests/Eval.sl" title="Eval.sl"><code>eval("sl", "function foo() { return 14 + 2; }");</code></a> |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLGetSizeBuiltin.java" title="SLGetSizeBuiltin.java"><code>getSize(Object o): long</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLHasSizeBuiltin.java" title="SLHasSizeBuiltin.java"><code>hasSize(Object o): boolean</code></a> | &nbsp; |
-| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLImportBuiltin.java" title="SLImportBuiltin.java"><code>import</code></a> | &nbsp; |
+| <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLImportBuiltin.java" title="SLImportBuiltin.java"><code>import</code></a> | <a href="../../language/src/test/java/com/oracle/truffle/sl/test/PassItselfBackViaContextTest.java#L94"><i>(see example in PassItselfBackViaContextText)</i></a> |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLIsExecutableBuiltin.java" title="SLIsExecutableBuiltin.java"><code>isExecutable(Object o): boolean</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLIsNullBuiltin.java" title="SLIsNullBuiltin.java"><code>isNull(Object o): boolean</code></a> | &nbsp; |
 | <a href="../../language/src/main/java/com/oracle/truffle/sl/builtins/SLNanoTimeBuiltin.java"><code>nanoTime(): long</code></a> | <a href="../../language/tests/Builtins.sl" title="Builtins.sl"><code>nanoTime()</code></a> |
