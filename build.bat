@@ -212,9 +212,10 @@ set __DEST_DIR=%~2
 if not "%__DEST_DIR:~-1%"=="\" set __DEST_DIR=%__DEST_DIR%\
 
 if exist "%__SOURCE_FILE%" (
+    for %%f in (%__SOURCE_FILE%) do set __SOURCE_NAME=%%~nxf
     if not exist "%__DEST_DIR%\" mkdir "%__DEST_DIR%"
     if %_DEBUG%==1 ( echo [%_BASENAME%] copy /y "%__SOURCE_FILE%" "%__DEST_DIR%" 1>&2
-    ) else if %_VERBOSE%==1 ( echo Copy file to directory !__DEST_DIR:%_ROOT_DIR%=! 1>&2
+    ) else if %_VERBOSE%==1 ( echo Copy file !__SOURCE_NAME! to directory !__DEST_DIR:%_ROOT_DIR%=! 1>&2
     )
     copy /y "%__SOURCE_FILE%" "%__DEST_DIR%" 1>NUL
     if not !ERRORLEVEL!==0 (
