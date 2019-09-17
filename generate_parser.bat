@@ -90,6 +90,7 @@ set _DEBUG=0
 set _HELP=0
 set _INSTALL=0
 set _TEST=0
+set _TEST_COUNT=
 set _VERBOSE=0
 set __N=0
 :args_loop
@@ -105,6 +106,15 @@ if /i "%__ARG%"=="help" ( set _HELP=1
 ) else if /i "%__ARG%"=="clean" ( set _CLEAN=1
 ) else if /i "%__ARG%"=="install" ( set _BUILD=1& set _TEST=1& set _INSTALL=1
 ) else if /i "%__ARG%"=="test" ( set _BUILD=1& set _TEST=1
+) else if /i "%__ARG:~0,5%"=="test:" (
+    set /a "__NUMBER=%__ARG:~5%" + 0
+    if !__NUMBER! gtr 0 ( set "_TEST_COUNT=!__NUMBER!"
+    ) else (
+        echo Error: ignore invalid or missing argument: %__ARG% 1>&2
+        set _EXITCODE=1
+        goto args_done
+    )
+    set _BUILD=1& set _TEST=1
 ) else if /i "%__ARG%"=="-debug" ( set _DEBUG=1
 ) else if /i "%__ARG%"=="-help" ( set _HELP=1
 ) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
@@ -122,14 +132,15 @@ goto :eof
 :help
 echo Usage: %_BASENAME% { options ^| subcommands }
 echo   Options:
-echo     -debug    display commands executed by this script
-echo     -verbose  display progress messages
+echo     -debug     display commands executed by this script
+echo     -verbose   display progress messages
 echo   Subcommands:
-echo     build     generatre ANTLR parser for SL
-echo     clean     delete generated files
-echo     help      display this help message
-echo     install   copy lexer/parser files to language directory
-echo     test      perform test with generated ANTLR parser
+echo     build      generatre ANTLR parser for SL
+echo     clean      delete generated files
+echo     help       display this help message
+echo     install    copy lexer/parser files to language directory
+echo     test       execute all tests for generated ANTLR parser
+echo     test[:^<n^>] execute 1..n test^(s^) for generated ANTLR parser
 goto :eof
 
 :init
@@ -256,7 +267,7 @@ for %%f in (%_LANGUAGE_DIR%\tests\*.sl) do (
     set __CHECK_FILE=!__SL_FILE:~0,-2!output
 
     if %_DEBUG%==1 ( echo [%_BASENAME%] %_JAVA_CMD% %__JAVA_OPTS% -cp %__CPATH% %__MAIN_CLASS% "!__SL_FILE!" ^> !__OUTPUT_FILE! 1>&2
-    ) else if %_VERBOSE%==1 ( echo    Compile !__SL_FILE:%_LANGUAGE_DIR%\=! and check output with file !__CHECK_FILE:%_LANGUAGE_DIR%\=! 1>&2
+    ) else if %_VERBOSE%==1 ( echo    Compile !__SL_FILE:%_LANGUAGE_DIR%\=! and check output with !__CHECK_FILE:%_LANGUAGE_DIR%\=! 1>&2
     )
     call %_JAVA_CMD% %__JAVA_OPTS% -cp %__CPATH% %__MAIN_CLASS% !__SL_FILE! > !__OUTPUT_FILE! 2>&1
     if not !ERRORLEVEL!==0 (
@@ -271,7 +282,9 @@ for %%f in (%_LANGUAGE_DIR%\tests\*.sl) do (
         rem goto :eof
     )
     set /a __N+=1
+    if defined _TEST_COUNT if !__N! geq %_TEST_COUNT% goto test_done
 )
+:test_done
 if %_VERBOSE%==1 echo Finished test suite ^(%__N% files^) 1>&2
 goto :eof
 
