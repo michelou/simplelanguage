@@ -74,7 +74,7 @@ if /i "%__ARG%"=="help" ( set _HELP=1
 shift
 goto :args_loop
 :args_done
-if %_DEBUG%==1 echo [%_BASENAME%] _HELP=%_HELP% _USE_SDK=%_USE_SDK% _VERBOSE=%_VERBOSE%
+if %_DEBUG%==1 echo [%_BASENAME%] _HELP=%_HELP% _USE_SDK=%_USE_SDK% _VERBOSE=%_VERBOSE% 1>&2
 goto :eof
 
 :help
@@ -95,14 +95,14 @@ set _GRAAL_PATH=
 set __JAVAC_EXE=
 for /f %%f in ('where javac.exe 2^>NUL') do set __JAVAC_EXE=%%f
 if defined __JAVAC_EXE (
-    if %_DEBUG%==1 echo [%_BASENAME%] Using path of javac executable found in PATH
+    if %_DEBUG%==1 echo [%_BASENAME%] Using path of javac executable found in PATH 1>&2
     for %%i in ("%__JAVAC_CMD%") do set __GRAAL_BIN_DIR=%%~dpsi
     for %%f in ("!__GRAAL_BIN_DIR!..") do set _GRAAL_HOME=%%~sf
     rem keep _GRAAL_PATH undefined since executable already in path
     goto :eof
 ) else if defined GRAAL_HOME (
     set _GRAAL_HOME=%GRAAL_HOME%
-    if %_DEBUG%==1 echo [%_BASENAME%] Using environment variable GRAAL_HOME
+    if %_DEBUG%==1 echo [%_BASENAME%] Using environment variable GRAAL_HOME 1>&2
 ) else (
     set __PATH=C:\opt
     for /f %%f in ('dir /ad /b "!__PATH!\graalvm-ce*" 2^>NUL') do set "_GRAAL_HOME=!__PATH!\%%f"
@@ -128,14 +128,14 @@ set _MAVEN_PATH=
 set __MVN_CMD=
 for /f %%f in ('where mvn.cmd 2^>NUL') do set __MVN_CMD=%%f
 if defined __MVN_CMD (
-    if %_DEBUG%==1 echo [%_BASENAME%] Using path of Maven executable found in PATH
+    if %_DEBUG%==1 echo [%_BASENAME%] Using path of Maven executable found in PATH 1>&2
     for %%i in ("%__MVN_CMD%") do set __MVN_BIN_DIR=%%~dpsi
     for %%f in ("!__MVN_BIN_DIR!..") do set _MAVEN_HOME=%%~sf
     rem keep _MAVEN_PATH undefined since executable already in path
     goto :eof
 ) else if defined MAVEN_HOME (
     set _MAVEN_HOME=%MAVEN_HOME%
-    if %_DEBUG%==1 echo [%_BASENAME%] Using environment variable MAVEN_HOME
+    if %_DEBUG%==1 echo [%_BASENAME%] Using environment variable MAVEN_HOME 1>&2
 ) else (
     set __PATH=C:\opt
     for /f %%f in ('dir /ad /b "!__PATH!\apache-maven-*" 2^>NUL') do set "_MAVEN_HOME=!__PATH!\%%f"
@@ -151,7 +151,7 @@ if not exist "%_MAVEN_HOME%\bin\mvn.cmd" (
 )
 rem path name of installation directory may contain spaces
 for /f "delims=" %%f in ("%_MAVEN_HOME%") do set _MAVEN_HOME=%%~sf
-if %_DEBUG%==1 echo [%_BASENAME%] Using default Maven installation directory %_MAVEN_HOME%
+if %_DEBUG%==1 echo [%_BASENAME%] Using default Maven installation directory %_MAVEN_HOME% 1>&2
 
 set "_MAVEN_PATH=;%_MAVEN_HOME%\bin"
 goto :eof
@@ -164,12 +164,12 @@ set __GIT_HOME=
 set __GIT_EXE=
 for /f %%f in ('where git.exe 2^>NUL') do set __GIT_EXE=%%f
 if defined __GIT_EXE (
-    if %_DEBUG%==1 echo [%_BASENAME%] Using path of Git executable found in PATH
+    if %_DEBUG%==1 echo [%_BASENAME%] Using path of Git executable found in PATH 1>&2
     rem keep _GIT_PATH undefined since executable already in path
     goto :eof
 ) else if defined GIT_HOME (
     set "__GIT_HOME=%GIT_HOME%"
-    if %_DEBUG%==1 echo [%_BASENAME%] Using environment variable GIT_HOME
+    if %_DEBUG%==1 echo [%_BASENAME%] Using environment variable GIT_HOME 1>&2
 ) else (
     set __PATH=C:\opt
     if exist "!__PATH!\Git\" ( set __GIT_HOME=!__PATH!\Git
@@ -188,7 +188,7 @@ if not exist "%__GIT_HOME%\bin\git.exe" (
 )
 rem path name of installation directory may contain spaces
 for /f "delims=" %%f in ("%__GIT_HOME%") do set __GIT_HOME=%%~sf
-if %_DEBUG%==1 echo [%_BASENAME%] Using default Git installation directory %__GIT_HOME%
+if %_DEBUG%==1 echo [%_BASENAME%] Using default Git installation directory %__GIT_HOME% 1>&2
 
 set "_GIT_PATH=;%__GIT_HOME%\bin;%__GIT_HOME%\usr\bin;%__GIT_HOME%\mingw64\bin"
 goto :eof
@@ -308,8 +308,8 @@ echo %__VERSIONS_LINE1%
 echo %__VERSIONS_LINE2%
 if %__VERBOSE%==1 if defined __WHERE_ARGS (
     rem if %_DEBUG%==1 echo [%_BASENAME%] where %__WHERE_ARGS%
-    echo Tool paths:
-    for /f "tokens=*" %%p in ('where %__WHERE_ARGS%') do echo    %%p
+    echo Tool paths: 1>&2
+    for /f "tokens=*" %%p in ('where %__WHERE_ARGS%') do echo    %%p 1>&2
 )
 goto :eof
 
@@ -329,7 +329,7 @@ endlocal & (
     )
     set "PATH=%_GRAAL_PATH%%PATH%%_MAVEN_PATH%%_GIT_PATH%%_MSVC_PATH%%_SDK_PATH%"
     call :print_env %_VERBOSE%
-    if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE%
+    if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE% 1>&2
     for /f "delims==" %%i in ('set ^| findstr /b "_"') do set %%i=
     rem must be called last
     if %_USE_SDK%==1 if not defined WindowsSDKDir (
