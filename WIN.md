@@ -40,11 +40,11 @@ Optionally one may also install the following software:
 
 > **:mag_right:** Git for Windows provides a BASH emulation used to run [**`git`**](https://git-scm.com/docs/git) from the command line (as well as over 250 Unix commands like [**`awk`**](https://www.linux.org/docs/man1/awk.html), [**`diff`**](https://www.linux.org/docs/man1/diff.html), [**`file`**](https://www.linux.org/docs/man1/file.html), [**`grep`**](https://www.linux.org/docs/man1/grep.html), [**`more`**](https://www.linux.org/docs/man1/more.html), [**`mv`**](https://www.linux.org/docs/man1/mv.html), [**`rmdir`**](https://www.linux.org/docs/man1/rmdir.html), [**`sed`**](https://www.linux.org/docs/man1/sed.html) and [**`wc`**](https://www.linux.org/docs/man1/wc.html)).
 
-For instance our development environment looks as follows (*August 2019*):
+For instance our development environment looks as follows (*October 2019*):
 
 <pre style="font-size:80%;">
 C:\opt\apache-maven-3.6.2\                            <i>( 10 MB)</i>
-C:\opt\graalvm-ce-19.2.0\                             <i>(361 MB)</i>
+C:\opt\graalvm-ce-19.2.1\                             <i>(361 MB)</i>
 C:\opt\Git-2.23.0\                                    <i>(271 MB)</i>
 C:\Program Files\Microsoft SDKs\Windows\v7.1\         <i>(333 MB)</i>
 C:\Program Files (x86)\Microsoft Visual Studio 10.0\  <i>(555 MB)</i>
@@ -125,6 +125,7 @@ We distinguish different sets of batch commands:
       Options:
         -debug      show commands executed by this script
         -native     generate executable (native-image)
+        -timer      display total elapsed time
         -verbose    display progress messages
       Subcommands:
         clean       delete generated files
@@ -165,11 +166,11 @@ Command [**`setenv`**](setenv.bat) is executed once to setup our development env
 <pre style="font-size:80%;">
 <b>&gt; setenv</b>
 Tool versions:
-   javac 1.8.0_222, mvn 3.6.2, git 2.23.0.windows.1, diff 3.7
+   javac 1.8.0_232, mvn 3.6.2, git 2.23.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 
 <b>&gt; where javac mvn</b>
-C:\opt\graalvm-ce-19.2.0\bin\javac.exe
+C:\opt\graalvm-ce-19.2.1\bin\javac.exe
 C:\opt\apache-maven-3.6.2\bin\mvn
 C:\opt\apache-maven-3.6.2\bin\mvn.cmd
 </pre>
@@ -179,10 +180,10 @@ Command [**`setenv -verbose`**](setenv.bat) also displays the tool paths:
 <pre style="font-size:80%;">
 <b>&gt; setenv -verbose</b>
 Tool versions:
-   javac 1.8.0_222, mvn 3.6.2, git 2.23.0.windows.1, diff 3.7
+   javac 1.8.0_232, mvn 3.6.2, git 2.23.0.windows.1, diff 3.7
    cl 16.00.40219.01 for x64, dumpbin 10.00.40219.01, uuidgen v1.01
 Tool paths:
-   C:\opt\graalvm-ce-19.2.0\bin\javac.exe
+   C:\opt\graalvm-ce-19.2.1\bin\javac.exe
    C:\opt\apache-maven-3.6.2\bin\mvn.cmd
    C:\opt\Git-2.23.0\bin\git.exe
    C:\opt\Git-2.23.0\usr\bin\diff.exe
@@ -226,11 +227,11 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO] simplelanguage-graalvm-component                                   [pom]
 [INFO]
 [INFO] ------------------< com.oracle:simplelanguage-parent >------------------
-[INFO] Building simplelanguage-parent 19.2.0-SNAPSHOT                     [1/5]
+[INFO] Building simplelanguage-parent 19.2.1-SNAPSHOT                     [1/5]
 [INFO] --------------------------------[ pom ]---------------------------------
 [...]
 [INFO] --------------< com.oracle:simplelanguage-graalvm-native >--------------
-[INFO] Building simplelanguage-graalvm-native 19.2.0-SNAPSHOT             [4/5]
+[INFO] Building simplelanguage-graalvm-native 19.2.1-SNAPSHOT             [4/5]
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO]
 [INFO] --- exec-maven-plugin:1.6.0:exec (make_native) @ simplelanguage-graalvm-native ---
@@ -242,7 +243,7 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [S:\\native\target\slnative:3432]   (features):   2,000.37 ms
 [S:\\native\target\slnative:3432]     analysis:  26,150.04 ms
 [S:\\native\target\slnative:3432]     (clinit):     529.91 ms
-1349 method(s) included for runtime compilation              
+1415 method(s) included for runtime compilation              
 [S:\\native\target\slnative:3432]     universe:   1,655.70 ms
 [S:\\native\target\slnative:3432]      (parse):   2,496.46 ms
 [S:\\native\target\slnative:3432]     (inline):   3,769.89 ms
@@ -253,12 +254,12 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [S:\\native\target\slnative:3432]      [total]:  90,272.90 ms
 [INFO]     
 [INFO] ------------< com.oracle:simplelanguage-graalvm-component >-------------
-[INFO] Building simplelanguage-graalvm-component 19.2.0-SNAPSHOT          [5/5]
+[INFO] Building simplelanguage-graalvm-component 19.2.1-SNAPSHOT          [5/5]
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO]   
 [INFO] --- exec-maven-plugin:1.6.0:exec (make_component) @ simplelanguage-graalvm-component ---
 [INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary for simplelanguage-parent 19.2.0-SNAPSHOT:
+[INFO] Reactor Summary for simplelanguage-parent 19.2.1-SNAPSHOT:
 [INFO]
 [INFO] simplelanguage-parent .............................. SUCCESS [  0.036 s]
 [INFO] simplelanguage ..................................... SUCCESS [ 16.164 s]
@@ -268,8 +269,8 @@ Command [**`build -native -verbose dist`**](build.bat) generates both the JVM ve
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  01:49 min
-[INFO] Finished at: 2019-08-21T10:14:13+07:00
+[INFO] Total time:  01:44 min
+[INFO] Finished at: 2019-10-24T10:32:33+02:00
 [INFO] ------------------------------------------------------------------------
 Copy executable S:\native\target\slnative.exe to directory S:\target\sl\bin
 </pre>
@@ -294,19 +295,19 @@ S:\TARGET
     │
     └───lib
             antlr4-runtime-4.7.2.jar
-            launcher-19.2.0-SNAPSHOT.jar
-            simplelanguage-19.2.0-SNAPSHOT.jar
+            launcher-19.2.1-SNAPSHOT.jar
+            simplelanguage-19.2.1-SNAPSHOT.jar
 </pre>
 
 > **:mag_right:** As expected the file sizes for the JVM and native versions are very different:
 > <pre style="font-size:80%;">
 > <b>&gt; where /t /r target\sl\lib *.jar</b>
 >    337904   22.07.2019      18:41:46  S:\target\sl\lib\antlr4-runtime-4.7.2.jar
->      4945   24.07.2019      12:53:37  S:\target\sl\lib\launcher-19.2.0-SNAPSHOT.jar
->    339575   24.07.2019      12:53:37  S:\target\sl\lib\simplelanguage-19.2.0-SNAPSHOT.jar
+>      4962   24.10.2019      10:31:06  S:\target\sl\lib\launcher-19.2.1-SNAPSHOT.jar
+>    339676   24.10.2019      10:31:04 S:\target\sl\lib\simplelanguage-19.2.1-SNAPSHOT.jar
 >
 > <b>&gt; where /t /r target\sl\bin *.exe</b>
->  26853376   24.07.2019      13:09:57  S:\target\sl\bin\slnative.exe
+>  27229696   24.10.2019      10:32:30  S:\target\sl\bin\slnative.exe
 > </pre>
 
 We can now execute both versions (JVM and native) of our application:
@@ -427,8 +428,8 @@ Replacing option **`-verbose`** by **`-debug`** in the above command (i.e. [**`g
 <b>&gt; generate_parser -debug test</b>
 [generate_parser] _DEBUG=1 _TEST=1 _VERBOSE=0
 [generate_parser] java.exe -cp S:\target\parser\libs\antlr-4.7.2-complete.jar org.antlr.v4.Tool -package com.oracle.truffle.sl.parser -no-listener S:\language\src\main\java\com\oracle\truffle\sl\parser\SimpleLanguage.g4 -o S:\target\parser\src
-[generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
-[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.2.0\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SLMain "S:\language\tests\Add.sl"
+[generate_parser] javac.exe -cp ;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -d "S:\target\parser\classes" @"S:\target\parser\source_list.txt"
+[generate_parser] java.exe  -Dtruffle.class.path.append=S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes -cp ;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\locator.jar;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\truffle-api.jar;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\truffle-dsl-processor.jar;C:\opt\graalvm-ce-19.2.1\jre\lib\truffle\truffle-tck.jar;S:\target\parser\libs\antlr-4.7.2-complete.jar;S:\target\parser\classes com.oracle.truffle.sl.parser.SLMain "S:\language\tests\Add.sl"
 == running on org.graalvm.polyglot.Engine@56cbfb61
 7
 34
@@ -515,7 +516,7 @@ For instance, the SL source file [**`Fibonacci.sl`**](language/tests/Fibonacci.s
 <a name="footnote_01">[1]</a> ***2 GraalVM editions*** [↩](#anchor_01)
 
 <p style="margin:0 0 1em 20px;">
-<a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_221</a>.
+<a href="https://www.graalvm.org/docs/getting-started/">GraalVM</a> is available as Community Edition (CE) and Enterprise Edition (EE): GraalVM CE is based on the <a href="https://adoptopenjdk.net/">OpenJDK 8</a> and <a href="https://www.oracle.com/technetwork/graalvm/downloads/index.html">GraalVM EE</a> is developed on top of the <a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Java SE 1.8.0_231</a>.
 </p>
 
 <a name="footnote_02">[2]</a> ***2018-09-24*** [↩](#anchor_02a)
@@ -533,7 +534,7 @@ In our case we downloaded the following installation files (see section <a href=
 </p>
 <pre style="margin:0 0 1em 20px; font-size:80%;">
 <a href="https://archive.apache.org/dist/ant/binaries/">apache-maven-3.6.2-bin.zip</a>          <i>(  8 MB)</i>
-<a href="https://github.com/oracle/graal/releases/tag/vm-19.2.0">graalvm-ce-windows-amd64-19.2.0.zip</a> <i>(170 MB)</i>
+<a href="https://github.com/oracle/graal/releases/tag/vm-19.2.1">graalvm-ce-windows-amd64-19.2.1.zip</a> <i>(170 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?id=8442">GRMSDKX_EN_DVD.iso</a>                  <i>(570 MB)</i>
 <a href="https://www.microsoft.com/en-us/download/details.aspx?displaylang=en&id=4422">VC-Compiler-KB2519277.exe</a>           <i>(121 MB)</i>
 </pre>
@@ -556,5 +557,5 @@ We used the online tool <a href="https://www.bottlecaps.de/rr/ui">Railroad Diagr
 
 ***
 
-*[mics](http://lampwww.epfl.ch/~michelou/)/August 2019* [**&#9650;**](#top)
+*[mics](http://lampwww.epfl.ch/~michelou/)/October 2019* [**&#9650;**](#top)
 <span id="bottom">&nbsp;</span>

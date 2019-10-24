@@ -14,7 +14,7 @@ set _LANGUAGE_DIR=%_ROOT_DIR%language
 set _LAUNCHER_DIR=%_ROOT_DIR%launcher
 set _NATIVE_DIR=%_ROOT_DIR%native
 
-set _GRAALVM_VERSION=19.2.0.1
+set _GRAALVM_VERSION=19.2.1
 
 for %%f in ("%~dp0") do set _COMPONENT_DIR=%%~sf
 

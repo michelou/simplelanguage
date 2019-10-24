@@ -15,7 +15,7 @@ set _LAUNCHER_DIR=%_ROOT_DIR%launcher
 
 set _TARGET_DIR=%_ROOT_DIR%native\target
 
-set _GRAALVM_VERSION=19.2.0.1
+set _GRAALVM_VERSION=19.2.1
 
 set _NATIVE_CMD=%JAVA_HOME%\bin\native-image.cmd
 if not exist "%_NATIVE_CMD%" (

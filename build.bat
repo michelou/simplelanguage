@@ -62,46 +62,59 @@ set _PARSER=0
 set _DEBUG=0
 set _HELP=0
 set _NATIVE=0
+set _TIMER=0
 set _VERBOSE=0
 set __N=0
 :args_loop
-set __ARG=%~1
+set "__ARG=%~1"
 if not defined __ARG (
     if !__N!==0 set _HELP=1
     goto args_done
-) else if not "%__ARG:~0,1%"=="-" (
-    set /a __N=!__N!+1
 )
-if /i "%__ARG%"=="help" ( set _HELP=1
-) else if /i "%__ARG%"=="clean" ( set _CLEAN=1
-) else if /i "%__ARG%"=="dist" ( set _DIST=1
-) else if /i "%__ARG%"=="parser" ( set _PARSER=1
-) else if /i "%__ARG%"=="-debug" ( set _DEBUG=1
-) else if /i "%__ARG%"=="-help" ( set _HELP=1
-) else if /i "%__ARG%"=="-native" ( set _NATIVE=1
-) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
+if "%__ARG:~0,1%"=="-" (
+    rem option
+    if /i "%__ARG%"=="-debug" ( set _DEBUG=1
+    ) else if /i "%__ARG%"=="-help" ( set _HELP=1
+    ) else if /i "%__ARG%"=="-native" ( set _NATIVE=1
+    ) else if /i "%__ARG%"=="-timer" ( set _TIMER=1
+    ) else if /i "%__ARG%"=="-verbose" ( set _VERBOSE=1
+    ) else (
+        echo Error: Unknown option %__ARG% 1>&2
+        set _EXITCODE=1
+        goto args_done
+   )
 ) else (
-    echo Error: Unknown subcommand %__ARG% 1>&2
-    set _EXITCODE=1
-    goto :eof
+    rem subcommand
+    set /a __N+=1
+    if /i "%__ARG%"=="clean" ( set _CLEAN=1
+    ) else if /i "%__ARG%"=="dist" ( set _DIST=1
+    ) else if /i "%__ARG%"=="help" ( set _HELP=1
+    ) else if /i "%__ARG%"=="parser" ( set _PARSER=1
+    ) else (
+        echo Error: Unknown subcommand %__ARG% 1>&2
+        set _EXITCODE=1
+        goto args_done
+    )
 )
 shift
 goto :args_loop
 :args_done
+if %_TIMER%==1 for /f "delims=" %%i in ('powershell -c "(Get-Date)"') do set _TIMER_START=%%i
 if %_DEBUG%==1 echo [%_BASENAME%] _CLEAN=%_CLEAN% _DIST=%_DIST% _PARSER=%_PARSER% _NATIVE=%_NATIVE% _VERBOSE=%_VERBOSE% 1>&2
 goto :eof
 
 :help
 echo Usage: %_BASENAME% { options ^| subcommands }
-echo Options:
-echo   -debug      show commands executed by this script
-echo   -native     generate native executable ^(native-image^)
-echo   -verbose    display progress messages
-echo Subcommands:
-echo   clean       delete generated files
-echo   dist        generate binary distribution
-echo   help        display this help message
-echo   parser      generate ANTLR parser for SL
+echo   Options:
+echo     -debug      show commands executed by this script
+echo     -native     generate native executable ^(native-image^)
+echo     -timer      display total elapsed time
+echo     -verbose    display progress messages
+echo   Subcommands:
+echo     clean       delete generated files
+echo     dist        generate binary distribution
+echo     help        display this help message
+echo     parser      generate ANTLR parser for SL
 goto :eof
 
 rem output parameter(s): _MVN_CMD, MVN_OPTS
@@ -246,10 +259,23 @@ if not %ERRORLEVEL%==0 (
 )
 goto :eof
 
+rem output parameter: _DURATION
+:duration
+set __START=%~1
+set __END=%~2
+
+for /f "delims=" %%i in ('powershell -c "$interval = New-TimeSpan -Start '%__START%' -End '%__END%'; Write-Host $interval"') do set _DURATION=%%i
+goto :eof
+
 rem ##########################################################################
 rem ## Cleanups
 
 :end
+if %_TIMER%==1 (
+    for /f "delims=" %%i in ('powershell -c "(Get-Date)"') do set __TIMER_END=%%i
+    call :duration "%_TIMER_START%" "!__TIMER_END!"
+    echo Elapsed time: !_DURATION! 1>&2
+)
 if %_DEBUG%==1 echo [%_BASENAME%] _EXITCODE=%_EXITCODE% 1>&2
 exit /b %_EXITCODE%
 endlocal

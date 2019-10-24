@@ -11,14 +11,14 @@ set _BASENAME=%~n0
 
 set _EXITCODE=0
 
-for %%f in ("%~dp0..") do set _ROOT_DIR=%%~sf
+for %%f in ("%~dp0") do set _ROOT_DIR=%%~sf
 
 rem file build.sbt
-set _GRAALVM_VERSION_OLD="19.2.0"
-set _GRAALVM_VERSION_NEW="19.2.0.1"
+set _GRAALVM_VERSION_OLD="19.2.0.1"
+set _GRAALVM_VERSION_NEW="19.2.1"
 
-set _POM_GRAALVM_VERSION_OLD="19.2.0-SNAPSHOT"
-set _POM_GRAALVM_VERSION_NEW="19.2.0.1-SNAPSHOT"
+set _POM_GRAALVM_VERSION_OLD="19.2.0.1-SNAPSHOT"
+set _POM_GRAALVM_VERSION_NEW="19.2.1-SNAPSHOT"
 
 rem ##########################################################################
 rem ## Main
