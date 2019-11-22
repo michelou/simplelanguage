@@ -15,8 +15,6 @@ set _LAUNCHER_DIR=%_ROOT_DIR%launcher
 
 set _TARGET_DIR=%_ROOT_DIR%native\target
 
-set _GRAALVM_VERSION=19.2.1
-
 set _NATIVE_CMD=%JAVA_HOME%\bin\native-image.cmd
 if not exist "%_NATIVE_CMD%" (
     echo Error: Command file 'native-image.cmd' not found 1>&2
@@ -32,7 +30,7 @@ if not "%SL_BUILD_NATIVE%"=="true" (
     echo Skipping the native image build because SL_BUILD_NATIVE is set to false.
     goto end
 )
-set _CPATH=%_LANGUAGE_DIR%\target\simplelanguage.jar;%_LAUNCHER_DIR%\target\launcher-%_GRAALVM_VERSION%-SNAPSHOT.jar
+set _CPATH=%_LANGUAGE_DIR%\target\simplelanguage.jar;%_LAUNCHER_DIR%\target\sl-launcher.jar
 
 if exist "%_TARGET_DIR%\" rmdir /s /q "%_TARGET_DIR%"
 mkdir "%_TARGET_DIR%"
